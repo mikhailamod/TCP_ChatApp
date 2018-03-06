@@ -12,14 +12,15 @@ JUNITCP = .bin/:junit.jar:hamcrest.jar
 .java.class:
 	$(JAVAC) -cp .:./bin -d $(JCLASSDIR) $(JFLAGS) $*.java
 
-CLASSES = src/
+CLASSES = src/ChatAppServer.java \
+			src/ChatAppClient.java
 
 # Below: Class files I want the javadocs from
-CLASSFILES = bin/
+CLASSFILES = bin/ChatAppServer.class
 #Below: Java files I want the javadocs from
-DOCCLASSES = src/
+DOCCLASSES = src/ChatAppServer.java
 
-default: classes doc
+default: classes
 
 classes: $(CLASSES:.java=.class)
 
