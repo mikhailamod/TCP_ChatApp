@@ -7,7 +7,7 @@ import java.io.*;
 
 public class ChatAppServer
 {
-	public static final int PORT_NUMBER = 8020;
+	public static final int PORT_NUMBER = 5050;
 
 	public static void main(String[] args) throws IOException
 	{

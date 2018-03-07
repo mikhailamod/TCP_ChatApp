@@ -13,7 +13,14 @@ public class User
 	{
 		this.username = username;
 		this.hostname = hostname;
-		ip = InetAddress.getByName(hostname);
+		try{
+			ip = InetAddress.getByName(hostname);
+		}
+		catch (UnknownHostException e)
+		{
+			System.out.println("Error");
+		}
+		
 	}
 
 	public String getIP()
@@ -25,8 +32,14 @@ public class User
 	{
 		return hostname;
 	}
-	public getUsername()
+	public String getUsername()
 	{
 		return username;
+	}
+
+	public String toString()
+	{
+		String out = "Username: " + username + "\nHostname: " + hostname + "\nIP: " + getIP();
+		return out;
 	}
 }
