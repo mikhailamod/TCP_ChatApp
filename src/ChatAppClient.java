@@ -10,9 +10,25 @@ public class ChatAppClient
 		String hostname = "";
 
 		//Start up checks
-		if(args.length == 0)
+		if(args.length == 0)//use hostname command to get hostname
 		{
-			System.out.println("Please start app with java ChatAppClient <hostname> <port number>");
+			System.out.println("Fetching hostname and using Port Number " + portNumber);
+			try{
+
+				Process p = Runtime.getRuntime().exec("hostname");//run the hostname command
+				BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				String line = null;
+
+				while((line = input.readLine()) != null)
+				{
+					hostname = line;
+					System.out.println("DEBUG: " + hostname);
+				}//end while
+			}//end try
+			catch (IOException e)
+			{
+				System.out.println(e);
+			}
 		}
 		else if(args.length == 1)
 		{
