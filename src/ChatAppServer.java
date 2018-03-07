@@ -11,23 +11,27 @@ public class ChatAppServer
 
 	public static void main(String[] args) throws IOException
 	{
+		ServerSocket server = null;
+		Socket client = null;
 		System.out.println("Server started");
-		try(ServerSocket server = new ServerSocket(PORT_NUMBER);
-			Socket client = server.accept();
-			PrintWriter output = new PrintWriter(client.getOutputStream(), true);
-			BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		)//end try condition
+		try
 		{
-			String inputLine;
-			while((inputLine = input.readLine()) != null)//get input from client
-			{
-				System.out.print("recieved message: ");
-				System.out.println(inputLine);
-				output.println(inputLine);
-			}
+			server = new ServerSocket(PORT_NUMBER);
 		} catch (IOException e) {
 			System.out.println("ERROR");
 			System.out.println(e);
+		}
+		while(true)
+		{
+			try
+			{
+				client = server.accept();
+			}
+			catch(IOException ioe)
+			{
+				System.out.println("ERROR: " + ioe);
+			}
+			new ServerThread(client).start();
 		}
 	}
 }
