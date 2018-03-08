@@ -1,8 +1,9 @@
 //Class for user
 
 import java.net.*;
+import java.io.Serializable;
 
-public class User
+public class User implements Serializable
 {
 	//Attributes
 	private String username;

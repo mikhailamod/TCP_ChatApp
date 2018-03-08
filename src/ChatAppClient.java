@@ -37,16 +37,18 @@ public class ChatAppClient
 		
 		try(
 			Socket client = new Socket("mikhail-VirtualBox", portNumber);
-			PrintWriter output = new PrintWriter(client.getOutputStream(), true);
-			BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
+			ObjectInputStream input = new ObjectInputStream(client.getInputStream());
 			BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
 			)//end try conditions
 		{
 			String userInput;
 			while((userInput = consoleIn.readLine()) != null)
 			{
-				output.println(userInput);
-				System.out.println("Echo: " + input.readLine());
+				Message m = new Message(userInput, activeUser);
+				output.writeObject(m);
+				System.out.println("Message Sent\n" + m.toString());
+				Message r = (Message)input.readObject();
 			}//end while
 		}//end try
 		catch (UnknownHostException uhe)
@@ -59,6 +61,10 @@ public class ChatAppClient
 			System.out.println("error with IO");
 			System.out.println(ioe.toString());
 			System.exit(1);
+		}catch (ClassNotFoundException ee)
+		{
+			System.out.println("Class error");
+			System.out.println(ee);
 		}
 		
 

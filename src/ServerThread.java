@@ -19,21 +19,26 @@ public class ServerThread extends Thread
 	public void run()
 	{
 		try(
-			PrintWriter output = new PrintWriter(client.getOutputStream(), true);//send to clients output
-			BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));//input from client
+			//io streams for message objects
+			ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());//send to clients output
+			ObjectInputStream input = new ObjectInputStream(client.getInputStream());//input from client
 		)//end try condition
 		{
-			String inputLine;
-			while((inputLine = input.readLine()) != null)//get input from client
+			Message inputLine;
+			while((inputLine = (Message)input.readObject()) != null)//get input from client
 			{
-				System.out.print(id + " recieved message: ");
-				System.out.println(inputLine);
-				output.println(inputLine);//send to clients
+				System.out.println(id + " recieved message:");
+				System.out.println(inputLine.toString());
+				output.writeObject(inputLine);//send to clients
 			}
 			client.close();
 		} catch (IOException e) {
 			System.out.println("ERROR");
 			System.out.println(e);
+		} catch (ClassNotFoundException ee)
+		{
+			System.out.println("Class error");
+			System.out.println(ee);
 		}
 	}
 }
