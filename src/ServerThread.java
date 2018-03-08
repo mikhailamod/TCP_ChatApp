@@ -8,10 +8,12 @@ public class ServerThread extends Thread
 {
 	//Attributes
 	Socket client;
+	String id;
 
-	public ServerThread(Socket client)
+	public ServerThread(Socket client, String id)
 	{
 		this.client = client;
+		this.id = id;
 	}
 
 	public void run()
@@ -24,7 +26,7 @@ public class ServerThread extends Thread
 			String inputLine;
 			while((inputLine = input.readLine()) != null)//get input from client
 			{
-				System.out.print("recieved message: ");
+				System.out.print(id + " recieved message: ");
 				System.out.println(inputLine);
 				output.println(inputLine);//send to clients
 			}
