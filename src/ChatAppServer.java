@@ -33,7 +33,7 @@ public class ChatAppServer
 			{
 				System.out.println("ERROR: " + ioe);
 			}
-			ServerThread st = new ServerThread(client);
+			ServerThread st = new ServerThread(client, activeClients.size());
 			activeClients.add(st);
 			st.start();
 		}

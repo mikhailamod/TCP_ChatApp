@@ -8,9 +8,9 @@ public class ServerThread extends Thread
 {
 	//Attributes
 	Socket client;
-	String id;
+	int id;
 
-	public ServerThread(Socket client, String id)
+	public ServerThread(Socket client, int id)
 	{
 		this.client = client;
 		this.id = id;
