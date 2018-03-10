@@ -16,6 +16,7 @@ CLASSES = 	src/User.java \
 			src/Message.java \
 			src/ServerThread.java \
 			src/ChatAppServer.java \
+			src/ClientThread.java \
 			src/ChatAppClient.java
 			
 
@@ -24,7 +25,10 @@ CLASSFILES = bin/ChatAppServer.class
 #Below: Java files I want the javadocs from
 DOCCLASSES = src/ChatAppServer.java
 
-default: classes
+default: change classes
+
+change:
+	@cd src/
 
 classes: $(CLASSES:.java=.class)
 

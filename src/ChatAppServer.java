@@ -5,37 +5,82 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 
-public class ChatAppServer
+public class ChatAppServer implements Runnable
 {
-	public static final int PORT_NUMBER = 5050;
-	public static ArrayList<ServerThread> activeClients;
+	public int port_number;
+	public ArrayList<ServerThread> activeClients;//list of current active clients
+	ServerSocket server;
+	Thread serverThread = null;
 
-	public static void main(String[] args) throws IOException
+	public ChatAppServer(int port_num) throws IOException
 	{
 		activeClients = new ArrayList<>();
-		ServerSocket server = null;
-		Socket client = null;
-		System.out.println("Server started");
-		try
+		port_number = port_num;
+		server = new ServerSocket(port_num);
+		start();
+	}
+
+	//start threads
+	public void start()
+	{
+		if(serverThread == null)
 		{
-			server = new ServerSocket(PORT_NUMBER);
-		} catch (IOException e) {
-			System.out.println("ERROR");
-			System.out.println(e);
+			serverThread = new Thread(this);
+			serverThread.start();
 		}
-		while(true)
+	}
+
+	//when thread is running, do this
+	public void run()
+	{
+		while(serverThread != null)
 		{
 			try
 			{
-				client = server.accept();
-			}
-			catch(IOException ioe)
+				System.out.println("Connecting to user");
+				Socket client = server.accept();
+				addClient(client);
+			} catch (IOException e)
 			{
-				System.out.println("ERROR: " + ioe);
+				System.out.println("Error in run() method");
+				System.out.println(e.getMessage());
 			}
-			ServerThread st = new ServerThread(client, activeClients.size());
-			activeClients.add(st);
-			st.start();
 		}
+	}//end run
+
+	//when new client accepted, add them to list and start ServerThread for that client
+	public void addClient(Socket client)
+	{
+		System.out.println("User connected");
+		activeClients.add(new ServerThread(this, client));
+		activeClients.get(activeClients.size()-1).start();//start thread
+	}//end addClient
+
+	//send given message to all active clients
+	public synchronized void broadcast(int sentFromID, Message m)
+	{
+		int size = activeClients.size();
+		for (int i=0; i<size;i++ )
+		{
+			if(activeClients.get(i).id != sentFromID)
+			{
+				activeClients.get(i).recieveMessage(m);
+			}
+		}
+	}
+
+	public static void main(String[] args) throws IOException
+	{
+		ChatAppServer main_server = null;
+		System.out.println("Starting Server");
+		try
+		{
+			main_server = new ChatAppServer(Integer.parseInt(args[0]));
+		}
+		catch (IOException ie)
+		{
+			System.out.println("Error in ChatAppServer main()");
+		}
+		
 	}
 }

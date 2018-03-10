@@ -1,22 +1,96 @@
 //Client side of Chat App
-//TODO: change start up check into a method
-//		initiailize User object
+//Properly deal with errors and stop threads
 
 import java.net.*;
 import java.io.*;
 
-public class ChatAppClient
+public class ChatAppClient implements Runnable
 {
-	static int portNumber = ChatAppServer.PORT_NUMBER;
+	private int portNumber;
+	private User activeUser;
+
+	private ObjectOutputStream outputObject;
+	private BufferedReader consoleIn;
+
+	private ClientThread clientThread;	
+	private Thread thread = null;
+	private Socket socket;
+
+	public ChatAppClient(String hostname, int portNumber, String user_name)
+	{
+		System.out.println("Starting ChatAppClient()");
+
+		this.portNumber = portNumber;
+		activeUser = new User(user_name, hostname);
+
+		System.out.println("Logged in with the following details:\n" + activeUser.toString());
+		try
+		{
+			socket = new Socket(hostname, portNumber);//connect to server
+			start();//open IO
+		}
+		catch (UnknownHostException u)
+		{
+			System.out.println("Error in ChatAppClient con()");
+		}
+		catch (IOException ioe)
+		{
+			System.out.println("ERR");
+		}
+
+	}//end con
+
+	//initialize IO for user. Start threads.
+	public void start() throws IOException
+	{
+		outputObject = new ObjectOutputStream(socket.getOutputStream());//send a Message obj to server
+		consoleIn = new BufferedReader(new InputStreamReader(System.in));//to read from console
+
+		if(thread == null)
+		{
+			clientThread = new ClientThread(socket, this);
+			thread = new Thread(this);
+			thread.start();
+		}
+	}
+
+	//do the follwoing while ChatAppClient is running
+	public void run()
+	{
+		System.out.println("ChatAppClient thread running");
+		while(thread != null)
+		{
+			try
+			{
+				String userInput = consoleIn.readLine();//this is the message that will eventually be sent to another user.
+				Message m = new Message(userInput, activeUser);
+
+				outputObject.writeObject(m);
+				System.out.println("Message Sent\n");
+			}//end try
+			catch (IOException ie)
+			{
+				System.out.println("Error in ChatAppClient run() IO");
+				System.exit(1);//replace with proper way to deal with errors
+			}
+			
+		}
+	}//end run
+
+	public void recieve(Message m)
+	{
+		System.out.println(m.toString());
+	}
+
 	public static void main(String[] args) throws IOException {
 		
 		String hostname = "";
-		User activeUser;
+		int port = 6000;
 
 		//Start up checks
 		if(args.length == 0)//use hostname command to get hostname
 		{
-			hostname = getHostName();
+			hostname = getHostName(port);
 		}
 		else if(args.length == 1)
 		{
@@ -25,53 +99,18 @@ public class ChatAppClient
 		else
 		{
 			hostname = args[0];
-			portNumber = Integer.parseInt(args[1]);
+			port = Integer.parseInt(args[1]);
 		}
 		//get user info
 		System.out.println("Enter a username:");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String user_in = br.readLine();
-		activeUser = new User(user_in, hostname);
-
-		System.out.println("Logged in with the following details:\n" + activeUser.toString());
 		
-		try(
-			Socket client = new Socket("mikhail-VirtualBox", portNumber);
-			ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
-			ObjectInputStream input = new ObjectInputStream(client.getInputStream());
-			BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
-			)//end try conditions
-		{
-			String userInput;
-			while((userInput = consoleIn.readLine()) != null)
-			{
-				Message m = new Message(userInput, activeUser);
-				output.writeObject(m);
-				System.out.println("Message Sent\n" + m.toString());
-				Message r = (Message)input.readObject();
-			}//end while
-		}//end try
-		catch (UnknownHostException uhe)
-		{
-			System.out.println("error connecting to host");
-			System.out.println(uhe);
-		}
-		catch (IOException ioe)
-		{
-			System.out.println("error with IO");
-			System.out.println(ioe.toString());
-			System.exit(1);
-		}catch (ClassNotFoundException ee)
-		{
-			System.out.println("Class error");
-			System.out.println(ee);
-		}
-		
-
+		ChatAppClient app = new ChatAppClient(hostname, port, user_in);
 	}//end main
 
 	//Returns hostname
-	public static String getHostName()
+	public static String getHostName(int portNumber)
 	{
 		String hostname = null;
 		System.out.println("Fetching hostname and using Port Number " + portNumber);

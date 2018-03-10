@@ -18,7 +18,7 @@ public class Message implements Serializable
 
 	public String toString()
 	{
-		String s = "User: " + userFrom.getUsername() + "\n" + data;
+		String s = userFrom.getUsername() + " says: " + data;
 		return s;
 	}
 }
