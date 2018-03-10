@@ -82,7 +82,10 @@ public class ChatAppClient implements Runnable
 		System.out.println(m.toString());
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException 
+	{
+
+
 		
 		String hostname = "";
 		int port = 6000;
@@ -107,6 +110,20 @@ public class ChatAppClient implements Runnable
 		String user_in = br.readLine();
 		
 		ChatAppClient app = new ChatAppClient(hostname, port, user_in);
+
+		// adds a hook that runs the shutdown method when the program ends
+		Runtime.getRuntime().addShutdownHook
+		(
+			new Thread()
+			{
+				public void run()
+				{
+					app.shutdown();
+				}
+			}
+		);
+
+
 	}//end main
 
 	//Returns hostname
@@ -135,5 +152,22 @@ public class ChatAppClient implements Runnable
 			return e.toString();
 		}
 	}//end getHostName
+
+	//runs when program shutdowns. send a message to the server with the tag "end"
+	public void shutdown() 
+	{
+		System.err.println("shutdown");
+		try
+		{
+			Message m = new Message("", activeUser);
+			m.setTag("end");
+			outputObject.writeObject(m);
+		}
+		catch(IOException e)
+		{
+			System.out.println(e);
+		}
+    	
+  	}
 
 }//end class

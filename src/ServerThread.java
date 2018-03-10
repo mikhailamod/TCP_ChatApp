@@ -10,11 +10,13 @@ public class ServerThread extends Thread
 	ChatAppServer server;//ServerThread runs in ChatAppServer
 	Socket client;
 	int id;
+	volatile boolean running;
 	ObjectOutputStream output;
 	ObjectInputStream input;
 
 	public ServerThread(ChatAppServer server, Socket client)
 	{
+		this.running=true;
 		this.client = client;
 		this.server = server;
 		id = client.getPort();//the port of each socket uniquely identifies them
@@ -37,22 +39,34 @@ public class ServerThread extends Thread
 			output.writeObject(m);
 		} catch(IOException c)
 		{
-			System.out.println("Error recieveMessage() in ServerThread, ClassNot");
+			System.out.println("Error recieveMessage() in ServerThread, ClassNot ");
 		}
 	}
 
 	public void run()
 	{
 		System.out.println("ServerThread runnin " + id);
-		while(true)//shouldnt be while true, should be a volatile boolean
+		while(running)//shouldnt be while true, should be a volatile boolean
 		{
 			try
 			{
 				Message incomingMessage;
 				incomingMessage = (Message)input.readObject();//read incoming message and cast into Message
-				System.out.println(id + " recieved message:");//debug
-				System.out.println(incomingMessage.toString());//print message to server console
-				
+
+				//check tag of message. if it is "end" then close the socket
+				if(incomingMessage.getTag().equals("end"))
+				{
+					System.out.println(incomingMessage.getUser().getUsername() + " left");
+					output.close();
+					client.close();
+					running=false;
+				}
+				else
+				{
+					System.out.println(id + " recieved message:");//debug
+					System.out.println(incomingMessage.toString());//print message to server console
+				}
+					
 				//send input to server, which will send it to all clients
 				server.broadcast(id, incomingMessage);
 			} catch (IOException e) {

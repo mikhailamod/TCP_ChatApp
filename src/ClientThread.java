@@ -8,9 +8,12 @@ public class ClientThread extends Thread
 	private Socket clientSocket = null;//each client has a socket, this is their associated socket
 	private ChatAppClient client = null;//each ClientThread runs in ChatAppClient
 	private ObjectInputStream input;
+	private volatile boolean running;
+
 
 	public ClientThread(Socket socket, ChatAppClient client)
 	{
+		this.running = true;
 		this.clientSocket = socket;
 		this.client = client;
 		try
@@ -26,7 +29,7 @@ public class ClientThread extends Thread
 	public void run()
 	{
       System.out.println("Client Thread running");
-		while(true)//TO DO: should not be while true, there should be some volatile boolean that changes when error is thrown or when user disconnects
+		while(running)//TO DO: should not be while true, there should be some volatile boolean that changes when error is thrown or when user disconnects
 		{
 			try
 			{
@@ -36,12 +39,12 @@ public class ClientThread extends Thread
 			catch(ClassNotFoundException ie)
 			{
 				System.out.println("Error in ClientThread run(). Class");
-            System.exit(1);//change sometime soon pls
+            	System.exit(1);//change sometime soon pls
 			}
 			catch (IOException e)
 			{
 				System.out.println("Error in ClientThread run(). IO");
-            System.exit(1);
+            	System.exit(1);
 			}
 		}
 	}
