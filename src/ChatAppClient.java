@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import javax.swing.JOptionPane;
 
 public class ChatAppClient implements Runnable
 {
@@ -86,27 +87,31 @@ public class ChatAppClient implements Runnable
 
 			
             System.out.println("Would you like to send a media file? (y/n): ");
+            kb = new Scanner(System.in);
             boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
 
             if (decision) {
 
                 System.out.println("Please Enter the file Path: ");
 
+                //retrieves confirmation gets file name and directory from the input
+
                 String in = kb.nextLine();
 
                 String extension = in.substring(in.lastIndexOf("."));
 
-                System.out.println(extension);
-
                 Path path = Paths.get(in);
 
+                //retrieves which format the file extension fallls under (Image/video) 
                 String mime = getMIME(extension);
 
-
+                	//checks file exists
 	                if (new File(in).exists() && !new File(in).isDirectory()) {
 	                    
+	                    //reads in file as a byte array
 	                    byte[] fileContent = Files.readAllBytes(path);
 
+	                    //creates message with correct format
 	                    if (mime.equalsIgnoreCase("image")) {
 	                    	m = new Message(fileContent, activeUser, "image", in);
 	                    }
@@ -142,6 +147,7 @@ public class ChatAppClient implements Runnable
 		}
 	}//end run
 
+	//get file category based on extension
     public static String getMIME(String ext) throws IOException {
         if (ext.contains("png") || ext.contains("jpg") || ext.contains("jpeg")) {
             return "image";
@@ -160,15 +166,18 @@ public class ChatAppClient implements Runnable
 		}
 
 		else if(m.getTag().equals("image")) {
-			System.out.println(m.getUser().getUsername() + " wants to send you an image. Do you accept(y/n):" + "\n");
-			boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
-			if(decision) {
+			//System.out.println(" + "\n");
+			
+			int decision = JOptionPane.showConfirmDialog(null, m.getUser().getUsername() + " wants to send you an image. Do you accept?");
+			//checks if user wants to accept the file
+			//boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
+			if(decision==JOptionPane.YES_OPTION) {
 				try {
+					//turns byte array from received file into a stream
 	                ByteArrayInputStream bis = new ByteArrayInputStream(m.getFile());
+	                //must convert to bufferedimage in order to display
 	                BufferedImage img = ImageIO.read(bis);
-	                System.out.println("IMG");
-	                System.out.println("CALLLED!");
-
+	                //jframe created with icon to display image .. will work on dimensions etc int the GUI stage
 	                ImageIcon icon = new ImageIcon(img);
 	                JFrame frame = new JFrame();
 	                frame.setLayout(new FlowLayout());
@@ -177,7 +186,6 @@ public class ChatAppClient implements Runnable
 	                lbl.setIcon(icon);
 	                frame.add(lbl);
 	                frame.setVisible(true);
-	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				}
 				catch(Exception e) {
 
@@ -185,12 +193,17 @@ public class ChatAppClient implements Runnable
 			}
 		}
 		else if(m.getTag().equals("video")) {
-
-			String fname = m.getFilepath();
-			String ext = fname.substring(m.getFilepath().lastIndexOf("."));
-            System.out.println("Receiving Video File!");
-            m.outputFile(fname, ext);
-            System.out.println("File Successfully Downloaded!");
+			int decision = JOptionPane.showConfirmDialog(null, m.getUser().getUsername() + " wants to send you a video. Do you accept?");
+			//checks if user wants to accept the file
+			//boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
+			if(decision==JOptionPane.YES_OPTION) {
+					//get file with file path and start downloading it
+					String fname = m.getFilepath();
+					String ext = fname.substring(m.getFilepath().lastIndexOf("."));
+		            System.out.println("Receiving Video File!");
+		            m.outputFile(fname, ext);
+		            System.out.println("File Successfully Downloaded!");
+        		}
 		}
 
 		if(m.getTag().equals("end"))

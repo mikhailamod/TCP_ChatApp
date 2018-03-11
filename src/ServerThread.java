@@ -84,51 +84,6 @@ public class ServerThread extends Thread
 				}
 
 
-				else if(m.getTag().equals("image")) {
-					System.out.println(m.getUser().getUsername() + " wants to send you an image. Do you accept(y/n):" + "\n");
-					boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
-					if(decision) {
-						try {
-							Thread t = new Thread(new Runnable(){
-								public void run(){ 
-									try {
-
-						                System.out.println("Capturing Image!");
-						                ByteArrayInputStream bis = new ByteArrayInputStream(m.getFile());
-						                BufferedImage img = ImageIO.read(bis);
-						                ImageIcon icon = new ImageIcon(img);
-						                JFrame frame = new JFrame();
-						                frame.setLayout(new FlowLayout());
-						                frame.setSize(500, 500);
-						                JLabel lbl = new JLabel();
-						                lbl.setIcon(icon);
-						                frame.add(lbl);
-						                frame.setVisible(true);
-						                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);								
-									}
-									catch(Exception e) {
-
-									}
-								}
-							});
-							t.start();
-						}
-						catch(Exception e) {
-
-						}
-					}
-				}
-				else if(m.getTag().equals("video")) {
-
-					String fname = m.getFilepath();
-					String ext = fname.substring(m.getFilepath().lastIndexOf("."));
-		            System.out.println("Receiving Video File!");
-		            m.outputFile(fname, ext);
-		            System.out.println("File Successfully Downloaded!");
-				}
-
-
-
 				else
 				{
 					System.out.println(id + " recieved message:");//debug

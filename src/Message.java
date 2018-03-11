@@ -54,14 +54,19 @@ public class Message implements Serializable
 	}
 
 
+	//Outputs file to the received directory
 	public void outputFile(String name, String ext) {
         try {
-        	System.out.println(name+"  "+ext);
+
+        	//get directory of output
             String dir = name.substring(0, name.lastIndexOf("/")) + "/received/";
             String fname = name.substring(name.lastIndexOf("/") + 1, name.lastIndexOf("."));
+
+            //output file to directory
             FileOutputStream fileoutputstream = new FileOutputStream("../received/" + fname + "" + ext);
             fileoutputstream.write(this.file);
             fileoutputstream.close();
+            //optional command to open up video
             //desktop.open(new File(dir + "" + fname + "" + ext));
         } catch (IOException ex) {
             ex.printStackTrace();
