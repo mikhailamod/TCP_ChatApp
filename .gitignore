@@ -1,2 +1,4 @@
 *.class
 Temp.java
+*.sublime-project
+*.sublime-workspace

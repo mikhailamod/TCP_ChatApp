@@ -57,7 +57,7 @@ public class ChatAppClient implements Runnable
 	//do the follwoing while ChatAppClient is running
 	public void run()
 	{
-		System.out.println("ChatAppClient thread running");
+		System.out.println("ChatAppClient thread running\nType a message to broadcast it\n");
 		while(thread != null)
 		{
 			try
@@ -66,7 +66,7 @@ public class ChatAppClient implements Runnable
 				Message m = new Message(userInput, activeUser);
 
 				outputObject.writeObject(m);
-				System.out.println("Message Sent\n");
+				System.out.println("<Your message has been sent>\n");
 			}//end try
 			catch (IOException ie)
 			{
@@ -79,7 +79,15 @@ public class ChatAppClient implements Runnable
 
 	public void recieve(Message m)
 	{
-		System.out.println(m.toString());
+		if(m.getTag().equals("message"))
+		{
+			System.out.println(m.getUser().getUsername() + " says:" + m.toString() + "\n");
+		}
+		if(m.getTag().equals("end"))
+		{
+			System.out.println(m.toString());
+		}
+		
 	}
 
 	public static void main(String[] args) throws IOException 

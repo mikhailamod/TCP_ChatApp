@@ -24,10 +24,10 @@ public class Message implements Serializable
 	public User getUser(){ return userFrom; }
 	public String getTag(){ return tag; }
 	public void setTag(String tag){ this.tag = tag; }
+	public void setData(String data){this.data = data; }
 
 	public String toString()
 	{
-		String s = userFrom.getUsername() + " says: " + data;
-		return s;
+		return data;
 	}
 }

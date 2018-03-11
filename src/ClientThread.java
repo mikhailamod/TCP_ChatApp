@@ -39,13 +39,27 @@ public class ClientThread extends Thread
 			catch(ClassNotFoundException ie)
 			{
 				System.out.println("Error in ClientThread run(). Class");
-            	System.exit(1);//change sometime soon pls
+            exit();
 			}
 			catch (IOException e)
 			{
 				System.out.println("Error in ClientThread run(). IO");
-            	System.exit(1);
-			}
+           	exit();
+			}//edn catch
+		}//end while
+	}//end run
+
+	public void exit()
+	{
+		try
+		{
+			input.close(); //close output stream
+			clientSocket.close(); //close socket
+			running=false; //exit loop
 		}
-	}
+		catch(IOException ioe)
+		{
+			System.out.println("IO error in exit() ClientThread");
+		}
+	}//end exit
 }

@@ -56,31 +56,47 @@ public class ServerThread extends Thread
 				//check tag of message. if it is "end" then close the socket
 				if(incomingMessage.getTag().equals("end"))
 				{
-					System.out.println(incomingMessage.getUser().getUsername() + " left");
-					output.close(); //close output stream
-					client.close(); //close socket
-					server.removeClient(this); //remove this thread from the arraylist
-					running=false; //exit loop
+					//inform all clients that this client is leaving
+					String bye_text = incomingMessage.getUser().getUsername() + " has left.";
+					System.out.println(bye_text);
+					incomingMessage.setData(bye_text);
+					server.broadcast(id, incomingMessage);
+
+					//close IO
+					exit();
 				}
 				else
 				{
 					System.out.println(id + " recieved message:");//debug
 					System.out.println(incomingMessage.toString());//print message to server console
+					server.broadcast(id, incomingMessage);
 				}
-					
-				//send input to server, which will send it to all clients
-				server.broadcast(id, incomingMessage);
 			} catch (IOException e) {
 				System.out.println("Error in ServerThread run(), IO");
 				System.out.println(e);
-				System.exit(1);
+				exit();
 			} catch (ClassNotFoundException ee)
 			{
 				System.out.println("Error in ServerThread run(), Class error");
 				System.out.println(ee);
-				System.exit(1);
+				exit();
 			}//end catch
-		}
+		}//end while
 		
-	}
+	}//end run
+
+	public void exit()
+	{
+		try
+		{
+			output.close(); //close output stream
+			client.close(); //close socket
+			server.removeClient(this); //remove this thread from the arraylist
+			running=false; //exit loop
+		}
+		catch(IOException ioe)
+		{
+			System.out.println("IO error in exit() ServerThread");
+		}
+	}//end exit
 }
