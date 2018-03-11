@@ -56,6 +56,11 @@ public class ChatAppServer implements Runnable
 		activeClients.get(activeClients.size()-1).start();//start thread
 	}//end addClient
 
+	public void removeClient(ServerThread client)
+	{	
+		activeClients.remove(client);
+	}
+
 	//send given message to all active clients
 	public synchronized void broadcast(int sentFromID, Message m)
 	{

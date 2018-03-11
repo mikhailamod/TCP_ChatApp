@@ -57,9 +57,10 @@ public class ServerThread extends Thread
 				if(incomingMessage.getTag().equals("end"))
 				{
 					System.out.println(incomingMessage.getUser().getUsername() + " left");
-					output.close();
-					client.close();
-					running=false;
+					output.close(); //close output stream
+					client.close(); //close socket
+					server.removeClient(this); //remove this thread from the arraylist
+					running=false; //exit loop
 				}
 				else
 				{
