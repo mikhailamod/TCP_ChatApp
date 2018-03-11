@@ -10,7 +10,7 @@ JUNITCP = .bin/:junit.jar:hamcrest.jar
 
 .SUFFIXES: .java .class
 .java.class:
-	$(JAVAC) -cp .:./bin -d $(JCLASSDIR) $(JFLAGS) $*.java
+	$(JAVAC) -cp .:./bin:./src -d $(JCLASSDIR) $(JFLAGS) $*.java
 
 CLASSES = 	src/User.java \
 			src/Message.java \

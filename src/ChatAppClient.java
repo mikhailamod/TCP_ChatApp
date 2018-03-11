@@ -3,6 +3,21 @@
 
 import java.net.*;
 import java.io.*;
+import java.io.File;
+import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 
 public class ChatAppClient implements Runnable
 {
@@ -15,6 +30,10 @@ public class ChatAppClient implements Runnable
 	private ClientThread clientThread;	
 	private Thread thread = null;
 	private Socket socket;
+	private Message m = null;
+
+	//Global Variables
+	Scanner kb;
 
 	public ChatAppClient(String hostname, int portNumber, String user_name)
 	{
@@ -22,6 +41,8 @@ public class ChatAppClient implements Runnable
 
 		this.portNumber = portNumber;
 		activeUser = new User(user_name, hostname);
+
+		kb = new Scanner(System.in);
 
 		System.out.println("Logged in with the following details:\n" + activeUser.toString());
 		try
@@ -57,16 +78,60 @@ public class ChatAppClient implements Runnable
 	//do the follwoing while ChatAppClient is running
 	public void run()
 	{
-		System.out.println("ChatAppClient thread running\nType a message to broadcast it\n");
+		//System.out.println("ChatAppClient thread running\nType a message to broadcast it\n");
 		while(thread != null)
 		{
 			try
 			{
-				String userInput = consoleIn.readLine();//this is the message that will eventually be sent to another user.
-				Message m = new Message(userInput, activeUser);
 
-				outputObject.writeObject(m);
-				System.out.println("<Your message has been sent>\n");
+			
+            System.out.println("Would you like to send a media file? (y/n): ");
+            boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
+
+            if (decision) {
+
+                System.out.println("Please Enter the file Path: ");
+
+                String in = kb.nextLine();
+
+                String extension = in.substring(in.lastIndexOf("."));
+
+                System.out.println(extension);
+
+                Path path = Paths.get(in);
+
+                String mime = getMIME(extension);
+
+
+	                if (new File(in).exists() && !new File(in).isDirectory()) {
+	                    
+	                    byte[] fileContent = Files.readAllBytes(path);
+
+	                    if (mime.equalsIgnoreCase("image")) {
+	                    	m = new Message(fileContent, activeUser, "image", in);
+	                    }
+	                    else if (mime.equalsIgnoreCase("video")) {
+	                       	m = new Message(fileContent, activeUser, "video", in);
+	                    }
+	                } 
+                
+	                else {
+	                    System.out.println("File Path Does Not Exist!");
+	                }
+
+                }
+                else {
+                	System.out.println("Please Enter a message:");
+					String userInput = consoleIn.readLine();//this is the message that will eventually be sent to another user.
+					m = new Message(userInput, activeUser);
+                }
+
+
+                if(m!=null){
+					outputObject.writeObject(m);
+					System.out.println("<Your message has been sent>\n");         	
+                }
+
 			}//end try
 			catch (IOException ie)
 			{
@@ -77,12 +142,57 @@ public class ChatAppClient implements Runnable
 		}
 	}//end run
 
+    public static String getMIME(String ext) throws IOException {
+        if (ext.contains("png") || ext.contains("jpg") || ext.contains("jpeg")) {
+            return "image";
+        } else if (ext.contains("mp4") || ext.contains("mkv") || ext.contains("avi")) {
+            return "video";
+        } else {
+            return "message";
+        }
+
+    }
+
 	public void recieve(Message m)
 	{
-		if(m.getTag().equals("message"))
-		{
+		if(m.getTag().equals("message")) {
 			System.out.println(m.getUser().getUsername() + " says:" + m.toString() + "\n");
 		}
+
+		else if(m.getTag().equals("image")) {
+			System.out.println(m.getUser().getUsername() + " wants to send you an image. Do you accept(y/n):" + "\n");
+			boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
+			if(decision) {
+				try {
+	                ByteArrayInputStream bis = new ByteArrayInputStream(m.getFile());
+	                BufferedImage img = ImageIO.read(bis);
+	                System.out.println("IMG");
+	                System.out.println("CALLLED!");
+
+	                ImageIcon icon = new ImageIcon(img);
+	                JFrame frame = new JFrame();
+	                frame.setLayout(new FlowLayout());
+	                frame.setSize(500, 500);
+	                JLabel lbl = new JLabel();
+	                lbl.setIcon(icon);
+	                frame.add(lbl);
+	                frame.setVisible(true);
+	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				}
+				catch(Exception e) {
+
+				}
+			}
+		}
+		else if(m.getTag().equals("video")) {
+
+			String fname = m.getFilepath();
+			String ext = fname.substring(m.getFilepath().lastIndexOf("."));
+            System.out.println("Receiving Video File!");
+            m.outputFile(fname, ext);
+            System.out.println("File Successfully Downloaded!");
+		}
+
 		if(m.getTag().equals("end"))
 		{
 			System.out.println(m.toString());

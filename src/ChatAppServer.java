@@ -17,6 +17,7 @@ public class ChatAppServer implements Runnable
 		activeClients = new ArrayList<>();
 		port_number = port_num;
 		server = new ServerSocket(port_num);
+
 		start();
 	}
 
