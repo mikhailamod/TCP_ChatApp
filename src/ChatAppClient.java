@@ -24,6 +24,7 @@ public class ChatAppClient implements Runnable
 	private User activeUser;
 
 	private ObjectOutputStream outputObject;
+	private ObjectOutputStream outputUser;
 	private BufferedReader consoleIn;
 
 	private ClientThread clientThread;	
@@ -64,6 +65,7 @@ public class ChatAppClient implements Runnable
 	public void start() throws IOException
 	{
 		outputObject = new ObjectOutputStream(socket.getOutputStream());//send a Message obj to server
+		outputUser = new ObjectOutputStream(socket.getOutputStream());
 		consoleIn = new BufferedReader(new InputStreamReader(System.in));//to read from console
 
 		if(thread == null)
@@ -74,64 +76,88 @@ public class ChatAppClient implements Runnable
 		}
 	}
 
+	public void sendUserObject(User user)
+	{
+		try
+		{
+			Message m = new Message("", user);
+			m.setTag("userTransfer");
+			outputObject.writeObject(m);
+			System.out.println("DEBUG: Sent unser");
+		}
+		catch (IOException ioe)
+		{
+			System.out.println("Error in ChatAppClient sendUserObject");
+		}
+		
+	}
+
 	//do the follwoing while ChatAppClient is running
 	public void run()
 	{
+		sendUserObject(activeUser);
 		//System.out.println("ChatAppClient thread running\nType a message to broadcast it\n");
 		while(thread != null)
 		{
 			System.out.println("Commands:\n'@broadcast': send a message to everyone,\n'@file': send a file");
 			try
 			{
-            //System.out.println("Would you like to send a media file? (y/n): ");
-            //kb = new Scanner(System.in);
-			String userInput = consoleIn.readLine();//this is the message that will eventually be sent to another user.
+				String userInput = consoleIn.readLine();//this is the message that will eventually be sent to another user.
+	            if (userInput.equalsIgnoreCase("@file"))
+	            {
+	                System.out.println("Please Enter the file Path: ");
+	                //retrieves confirmation gets file name and directory from the input
+	                String in = consoleIn.readLine();
+	                String extension = in.substring(in.lastIndexOf("."));
+	                Path path = Paths.get(in);
+	                //retrieves which format the file extension fallls under (Image/video) 
+	                String mime = getMIME(extension);
 
-            if (userInput.equalsIgnoreCase("@file"))
-            {
+	            	//checks file exists
+	                if (new File(in).exists() && !new File(in).isDirectory())
+	                {
+	                    
+	                    //reads in file as a byte array
+	                    byte[] fileContent = Files.readAllBytes(path);
 
-                System.out.println("Please Enter the file Path: ");
-                //retrieves confirmation gets file name and directory from the input
-                String in = consoleIn.readLine();
-                String extension = in.substring(in.lastIndexOf("."));
-                Path path = Paths.get(in);
-                //retrieves which format the file extension fallls under (Image/video) 
-                String mime = getMIME(extension);
+	                    //creates message with correct format
+	                    if (mime.equalsIgnoreCase("image")) {
+	                    	m = new Message(fileContent, activeUser, "image", in);
+	                    }
+	                    else if (mime.equalsIgnoreCase("video")) {
+	                       	m = new Message(fileContent, activeUser, "video", in);
+	                    }
+	                } 
+	            
+	                else
+	                {
+	                    System.out.println("File Path Does Not Exist!");
+	                }
 
-            	//checks file exists
-                if (new File(in).exists() && !new File(in).isDirectory())
-                {
-                    
-                    //reads in file as a byte array
-                    byte[] fileContent = Files.readAllBytes(path);
+	            }
+	            else if(userInput.equalsIgnoreCase("@broadcast"))
+	            {
+	            	System.out.println("Please Enter a message:");
+	            	userInput = consoleIn.readLine();
+					m = new Message(userInput, activeUser);
+	            }
 
-                    //creates message with correct format
-                    if (mime.equalsIgnoreCase("image")) {
-                    	m = new Message(fileContent, activeUser, "image", in);
-                    }
-                    else if (mime.equalsIgnoreCase("video")) {
-                       	m = new Message(fileContent, activeUser, "video", in);
-                    }
-                } 
-            
-                else
-                {
-                    System.out.println("File Path Does Not Exist!");
-                }
+	            else if(userInput.substring(0,5).equals("@user"))
+	            {
+	            	String send_to = userInput.substring(6);
+	            	System.out.println(send_to + " DEBUGF");
+	            	System.out.println("Please Enter a message:");
+	            	userInput = consoleIn.readLine();
+					m = new Message(userInput, activeUser);
+					m.setTag("private");
+					m.setUserTo(send_to);//format of input is @user:name
+	            }
 
-            }
-            else if(userInput.equalsIgnoreCase("@broadcast"))
-            {
-            	System.out.println("Please Enter a message:");
-            	userInput = consoleIn.readLine();
-				m = new Message(userInput, activeUser);
-            }
-
-            if(m!=null)
-            {
-				outputObject.writeObject(m);
-				System.out.println("<Your message has been sent>\n");         	
-            }
+	            if(m!=null)
+	            {
+					outputObject.writeObject(m);
+					System.out.println("<Your message has been sent>\n");         	
+	            }
 
 			}//end try
 			catch (IOException ie)
@@ -157,10 +183,18 @@ public class ChatAppClient implements Runnable
 
 	public void recieve(Message m)
 	{
+		//for broadcasts
+		//TO DO: change message to broadcast
 		if(m.getTag().equals("message")) {
-			System.out.println(m.getUser().getUsername() + " says:" + m.toString() + "\n");
+			System.out.println("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
 		}
 
+		//for user to user message
+		else if(m.getTag().equals("private"))
+		{
+			System.out.println("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+		}
+		//for image broadcast
 		else if(m.getTag().equals("image")) {
 			//System.out.println(" + "\n");
 			

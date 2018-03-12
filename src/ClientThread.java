@@ -29,7 +29,7 @@ public class ClientThread extends Thread
 	public void run()
 	{
       System.out.println("Client Thread running");
-		while(running)//TO DO: should not be while true, there should be some volatile boolean that changes when error is thrown or when user disconnects
+		while(running)
 		{
 			try
 			{

@@ -29,6 +29,7 @@ public class ServerThread extends Thread
 	ObjectOutputStream output;
 	ObjectInputStream input;
 	Scanner kb = null;
+	User activeUser;//the user associated with this Socket
 
 	public ServerThread(ChatAppServer server, Socket client)
 	{
@@ -83,7 +84,21 @@ public class ServerThread extends Thread
 					exit();
 				}
 
+				//this message will contain no data, only a User object which we will assign to activeUser
+				else if(m.getTag().equals("userTransfer"))
+				{
+					activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
+					System.out.println("USER WORKED");
+				}
 
+				//contains details of private message
+				else if(m.getTag().equals("private"))
+				{
+					System.out.print(id + " recieved private message:");//debug
+					System.out.println(m.toString());//print message to server console
+					server.privateMessage(id, m);
+				}
+				//else this message will be a broadcast
 				else
 				{
 					System.out.println(id + " recieved message:");//debug

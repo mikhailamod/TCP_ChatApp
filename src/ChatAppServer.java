@@ -62,6 +62,24 @@ public class ChatAppServer implements Runnable
 		activeClients.remove(client);
 	}
 
+	//if server receives a message tagged as 'private', send to relevant user.
+	public synchronized void privateMessage(int sentFromID, Message m)
+	{
+		System.out.println("Private Message accepted");
+		int size = activeClients.size();
+		for (int i=0; i<size;i++ )
+		{
+			String clientName = activeClients.get(i).activeUser.getUsername();
+			System.out.println("Sending to user: " + clientName);
+			//System.out.println("DEBUIG CHECK NAME22: " + m.getUserTo());
+			if(clientName.equals(m.getUserTo()))
+			{
+				activeClients.get(i).recieveMessage(m);
+				break;//message only meant for one user, so stop
+			}
+		}
+	}
+
 	//send given message to all active clients
 	public synchronized void broadcast(int sentFromID, Message m)
 	{
