@@ -253,8 +253,6 @@ public class ChatAppClient implements Runnable
 	public static void main(String[] args) throws IOException 
 	{
 
-
-		
 		String hostname = "";
 		int port = 6000;
 
