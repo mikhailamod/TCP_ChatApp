@@ -24,16 +24,17 @@ public class ChatAppClient implements Runnable
 	private User activeUser;
 
 	private ObjectOutputStream outputObject;
-	private ObjectOutputStream outputUser;
+	//private ObjectOutputStream outputUser;
 	private BufferedReader consoleIn;
 
 	private ClientThread clientThread;	
 	private Thread thread = null;
 	private Socket socket;
 	private Message m = null;
+	private boolean hasSent;
 
 	//Global Variables
-	Scanner kb;
+	//Scanner kb;
 
 	public ChatAppClient(String hostname, int portNumber, String user_name)
 	{
@@ -41,8 +42,9 @@ public class ChatAppClient implements Runnable
 
 		this.portNumber = portNumber;
 		activeUser = new User(user_name, hostname);
+		hasSent = false;
 
-		kb = new Scanner(System.in);
+		//kb = new Scanner(System.in);
 
 		System.out.println("Logged in with the following details:\n" + activeUser.toString());
 		try
@@ -65,7 +67,7 @@ public class ChatAppClient implements Runnable
 	public void start() throws IOException
 	{
 		outputObject = new ObjectOutputStream(socket.getOutputStream());//send a Message obj to server
-		outputUser = new ObjectOutputStream(socket.getOutputStream());
+		//outputUser = new ObjectOutputStream(socket.getOutputStream());
 		consoleIn = new BufferedReader(new InputStreamReader(System.in));//to read from console
 
 		if(thread == null)
@@ -78,17 +80,22 @@ public class ChatAppClient implements Runnable
 
 	public void sendUserObject(User user)
 	{
-		try
+		if(!hasSent)
 		{
-			Message m = new Message("", user);
-			m.setTag("userTransfer");
-			outputObject.writeObject(m);
-			System.out.println("DEBUG: Sent unser");
+			try
+			{
+				Message m = new Message("", user);
+				m.setTag("userTransfer");
+				outputObject.writeObject(m);
+				System.out.println("DEBUG: Sent unser");
+				hasSent = true;
+			}
+			catch (IOException ioe)
+			{
+				System.out.println("Error in ChatAppClient sendUserObject");
+			}
 		}
-		catch (IOException ioe)
-		{
-			System.out.println("Error in ChatAppClient sendUserObject");
-		}
+		
 		
 	}
 

@@ -28,12 +28,12 @@ public class ServerThread extends Thread
 	volatile boolean running;
 	ObjectOutputStream output;
 	ObjectInputStream input;
-	Scanner kb = null;
+	//Scanner kb = null;
 	User activeUser;//the user associated with this Socket
 
 	public ServerThread(ChatAppServer server, Socket client)
 	{
-		kb = new Scanner(System.in);
+		//kb = new Scanner(System.in);
 		this.running=true;
 		this.client = client;
 		this.server = server;
