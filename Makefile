@@ -18,7 +18,10 @@ CLASSES = 	src/User.java \
 			src/ChatAppServer.java \
 			src/ServerThread.java \
 			src/ClientThread.java \
-			src/ChatAppClient.java
+			src/ChatAppClient.java \
+			src/GUI_Welcome.java \
+			src/GUI_Login.java \
+			src/GUI_Main.java
 			
 
 # Below: Class files I want the javadocs from
