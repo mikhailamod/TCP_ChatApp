@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,15 +19,6 @@ public class GUI_Login extends javax.swing.JFrame {
     boolean isSimple;
     boolean mustRegister;
     
-    public GUI_Login(String username, boolean mustRegister) {
-        this.username = username;
-        this.server = "mikhail-VirtualBox";
-        this.port = 6000;
-        isSimple = true;
-        this.mustRegister = mustRegister;
-        initComponents();
-        registerLook(mustRegister);
-    }
     public GUI_Login(String username, String server, int port, boolean mustRegister) {
         this.username = username;
         this.server = server;
@@ -139,19 +133,38 @@ public class GUI_Login extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
-        String pass = new String(pf_password.getPassword());
-        if(isSimple)
-        {
-            new GUI_Main(username, pass).setVisible(true);
-            this.setVisible(false);
-        }
-        else
-        {
-            new GUI_Main(username, pass, server, port);
-            this.setVisible(false);
-        }
+	if(!mustRegister)
+	{
+	    String pass = new String(pf_password.getPassword());
+	    while(!login(this.username, pass))
+	    {
+		JOptionPane.showMessageDialog(this, "Password incorrect");
+		pf_password.setText("");
+		pass = new String(pf_password.getPassword());
+	    }//edn while
+	}//end if
+	else
+	{
+	    String pass = new String(pf_password.getPassword());
+	    String pass2 = new String(pf_confirm.getPassword());
+	    //TO DO: while loop
+	}
+        
         
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    
+    public static boolean login(String username, String password)
+    {
+	String hashed = AuthManager.hashPassword(password);
+	if(!AuthManager.checkPassword(username, hashed)) {
+	    return false;
+	}//end while
+	else
+	{
+	    return true;
+	}
+    }
     
     /*
     public static void main(String args[]) {

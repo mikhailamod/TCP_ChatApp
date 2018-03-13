@@ -1,5 +1,6 @@
 
 import java.awt.TextField;
+import java.io.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,6 +16,7 @@ public class GUI_Welcome extends javax.swing.JFrame {
 
     //Attributes
     private boolean isSimple;
+    private static int PORT_NUMBER = 6000;
     /**
      * Creates new form GUI_Login
      */
@@ -177,24 +179,54 @@ public class GUI_Welcome extends javax.swing.JFrame {
         // TODO add your handling code here:
         String username = txf_username.getText();
         String server = "";
-        int port = -1;
+        int port = PORT_NUMBER;
         if(!isSimple)
         {
             server = txf_server.getText();
             port = Integer.parseInt(txf_port.getText());
+	}
+        else
+        {
+            server = getHostName(port);
+            
+        }
+        if(AuthManager.exists(username))//if username exists, make them login
+        {
             this.setVisible(false);
-            new GUI_Login(username, server, port, true).setVisible(true);
+	    new GUI_Login(username,server, port, false).setVisible(true);
         }
         else
         {
-            this.setVisible(false);
-            new GUI_Login(username, true).setVisible(true);
+	    this.setVisible(false);
+	    new GUI_Login(username,server, port, true).setVisible(true);
         }
-        
         
     }//GEN-LAST:event_btn_continueActionPerformed
 
-    /*
+    
+    //Returns hostname
+    public static String getHostName(int portNumber)
+    {
+	    String hostname = null;
+	    System.out.println("Fetching hostname and using Port Number " + portNumber);
+	    try{
+
+		    Process p = Runtime.getRuntime().exec("hostname");//run the hostname command
+		    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		    String line = null;
+
+		    while((line = input.readLine()) != null)
+		    {
+			    hostname = line;
+		    }//end while
+		    return hostname;
+	    }//end try
+	    catch (IOException e)
+	    {
+		    System.out.println(e);
+		    return e.toString();
+	    }
+    }//end getHostName
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -214,13 +246,14 @@ public class GUI_Welcome extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //get user info
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GUI_Welcome().setVisible(true);
             }
         });
-    }*/
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_continue;
