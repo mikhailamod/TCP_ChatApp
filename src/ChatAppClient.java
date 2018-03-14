@@ -24,7 +24,7 @@ public class ChatAppClient implements Runnable
 	private User activeUser;
 
 	private ObjectOutputStream outputObject;
-	//private ObjectOutputStream outputUser;
+	private ObjectInputStream GUI_Input;
 	private BufferedReader consoleIn;
 
 	private ClientThread clientThread;	
@@ -32,19 +32,20 @@ public class ChatAppClient implements Runnable
 	private Socket socket;
 	private Message m = null;
 	private boolean hasSent;
+	private GUI_Main gui;
 
 	//Global Variables
 	//Scanner kb;
 
-	public ChatAppClient(String hostname, int portNumber, String user_name)
+	public ChatAppClient(String hostname, int portNumber, String user_name, GUI_Main gui)
 	{
 		System.out.println("Starting ChatAppClient()");
 
 		this.portNumber = portNumber;
 		activeUser = new User(user_name, hostname);
 		hasSent = false;
-
-		//kb = new Scanner(System.in);
+		
+		this.gui = gui;
 
 		System.out.println("Logged in with the following details:\n" + activeUser.toString());
 		try
@@ -62,12 +63,11 @@ public class ChatAppClient implements Runnable
 		}
 
 	}//end con
-
+	
 	//initialize IO for user. Start threads.
 	public void start() throws IOException
 	{
 		outputObject = new ObjectOutputStream(socket.getOutputStream());//send a Message obj to server
-		//outputUser = new ObjectOutputStream(socket.getOutputStream());
 		consoleIn = new BufferedReader(new InputStreamReader(System.in));//to read from console
 
 		if(thread == null)
@@ -175,6 +175,22 @@ public class ChatAppClient implements Runnable
 			
 		}
 	}//end run
+	
+	//given a message type, data and intended receipient, write to OutputStream
+	public void send(String type, String message, String sendTo)
+	{
+		Message m = new Message(message, activeUser);
+		m.setTag(type);
+		m.setUserTo(sendTo);
+		try
+		{
+			outputObject.writeObject(m);
+		}
+		catch (IOException ioe)
+		{
+			System.out.println("Error in send() ChatAppClient");
+		}
+	}
 
 	//get file category based on extension
     public static String getMIME(String ext) throws IOException {
@@ -187,19 +203,21 @@ public class ChatAppClient implements Runnable
         }
 
     }
-
+	
+	//Given a Message obj, send to GUI with relevant output
 	public void recieve(Message m)
 	{
 		//for broadcasts
-		//TO DO: change message to broadcast
-		if(m.getTag().equals("message")) {
-			System.out.println("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+		if(m.getTag().equals("broadcast")) {
+			gui.recieve("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+			//System.out.println("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
 		}
 
 		//for user to user message
 		else if(m.getTag().equals("private"))
 		{
-			System.out.println("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+			gui.recieve("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+			//System.out.println("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
 		}
 		//for image broadcast
 		else if(m.getTag().equals("image")) {
@@ -249,58 +267,6 @@ public class ChatAppClient implements Runnable
 		}
 		
 	}
-
-	public static void main(String[] args) throws IOException 
-	{
-
-		String hostname = "";
-		int port = 6000;
-
-		//Start up checks
-		if(args.length == 0)//use hostname command to get hostname
-		{
-			hostname = getHostName(port);
-		}
-		else if(args.length == 1)
-		{
-			hostname = args[0];
-		}
-		else
-		{
-			hostname = args[0];
-			port = Integer.parseInt(args[1]);
-		}
-		//get user info
-		System.out.println("Enter a username:");
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String user_in = br.readLine();
-
-		if(AuthManager.exists(user_in))//if username exists, make them login
-		{
-			login(user_in);
-		}
-		else
-		{
-			register(user_in);
-		}
-		
-		ChatAppClient app = new ChatAppClient(hostname, port, user_in);
-
-		// adds a hook that runs the shutdown method when the program ends
-		Runtime.getRuntime().addShutdownHook
-		(
-			new Thread()
-			{
-				public void run()
-				{
-					app.shutdown();
-				}
-			}
-		);
-
-
-	}//end main
 
 	//get a password input from user - uses Unix console password format (i.e doesnt show)
 	//if check, then change text

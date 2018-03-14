@@ -29,8 +29,12 @@ public class GUI_Login extends javax.swing.JFrame {
         registerLook(mustRegister);
     }
     
+	//make text of password fields blank
+	//if user must register, show confirmation field
     private void registerLook(boolean mustRegister)
     {
+		pf_password.setText("");
+		pf_confirm.setText("");
         if(mustRegister)
         {
             lbl_confirm.setVisible(true);
@@ -133,38 +137,58 @@ public class GUI_Login extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
-	if(!mustRegister)
-	{
-	    String pass = new String(pf_password.getPassword());
-	    while(!login(this.username, pass))
-	    {
-		JOptionPane.showMessageDialog(this, "Password incorrect");
-		pf_password.setText("");
-		pass = new String(pf_password.getPassword());
-	    }//edn while
-	}//end if
-	else
-	{
-	    String pass = new String(pf_password.getPassword());
-	    String pass2 = new String(pf_confirm.getPassword());
-	    //TO DO: while loop
-	}
-        
-        
+		if(!mustRegister)
+		{
+			String pass = new String(pf_password.getPassword());
+			if(!login(this.username, pass))//entered incorrect password
+			{
+			JOptionPane.showMessageDialog(this, "Password incorrect");
+			pf_password.setText("");
+			}//end if login
+			else//entered correct password, log them in
+			{
+			new GUI_Main(username, server, port).setVisible(true);
+			this.dispose();
+			}
+		}//end if
+		else//user must first register
+		{
+			String pass = new String(pf_password.getPassword());
+			String pass2 = new String(pf_confirm.getPassword());
+			if(pass.equals(pass2))//password match, attempt to register
+			{
+				register(username, pass);
+				new GUI_Main(username, server, port).setVisible(true);
+				this.dispose();
+			}
+			else//password dont match
+			{
+				JOptionPane.showMessageDialog(this, "Passwords do not match!");
+				pf_password.setText("");
+				pf_confirm.setText("");
+			}//end else
+		}//end else  
     }//GEN-LAST:event_btn_loginActionPerformed
 
-    
+    //given a username and password, use AuthManager to check if user can log in
     public static boolean login(String username, String password)
     {
-	String hashed = AuthManager.hashPassword(password);
-	if(!AuthManager.checkPassword(username, hashed)) {
-	    return false;
-	}//end while
-	else
-	{
-	    return true;
-	}
-    }
+		String hashed = AuthManager.hashPassword(password);
+		if(!AuthManager.checkPassword(username, hashed)) {
+			return false;
+		}//end while
+		else
+		{
+			return true;
+		}
+    }//end login
+	
+	//given a username and hashed password, add details to textfile
+    public static void register(String username, String password)
+    {
+		String hashed = AuthManager.hashPassword(password);
+		AuthManager.writeToFile(username, hashed);
+    }//end register
     
     /*
     public static void main(String args[]) {
