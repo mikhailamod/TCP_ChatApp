@@ -5,6 +5,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicListUI;
+import javax.swing.plaf.basic.BasicListUI.ListSelectionHandler;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -37,8 +41,20 @@ public class GUI_Main extends javax.swing.JFrame {
 		activeUser = new User(username, server);
 		all_users = new ArrayList<>();
 		client = new ChatAppClient(server, port, username, this);
-        initComponents();
+		initComponents();
 		lbl_Heading.setText("Welcome  " + username);
+		messageType = "broadcast";
+		btn_attach.setEnabled(false);
+		txf_sendTo.setEnabled(false);
+		list_users.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent lse) {
+				if(!lse.getValueIsAdjusting())
+				{
+					txf_sendTo.setText(list_users.getSelectedValue().toString());
+				}//end if
+			}//end method
+		});
     }
     
 
@@ -55,7 +71,7 @@ public class GUI_Main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        list_users = new javax.swing.JList<>();
         lbl_ChatArea = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btn_send = new javax.swing.JButton();
@@ -95,19 +111,20 @@ public class GUI_Main extends javax.swing.JFrame {
 
         jScrollPane3.setBorder(null);
 
-        jList1.setBackground(new java.awt.Color(55, 71, 79));
-        jList1.setBorder(null);
-        jList1.setForeground(new java.awt.Color(254, 254, 254));
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        list_users.setBackground(new java.awt.Color(55, 71, 79));
+        list_users.setBorder(null);
+        list_users.setForeground(new java.awt.Color(254, 254, 254));
+        list_users.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList1);
+        list_users.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(list_users);
 
         lbl_ChatArea.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         lbl_ChatArea.setForeground(new java.awt.Color(254, 254, 254));
-        lbl_ChatArea.setText("Users");
+        lbl_ChatArea.setText("Users online");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -116,14 +133,14 @@ public class GUI_Main extends javax.swing.JFrame {
             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addComponent(lbl_ChatArea)
-                .addGap(66, 66, 66))
+                .addGap(43, 43, 43))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addComponent(lbl_ChatArea)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -144,6 +161,7 @@ public class GUI_Main extends javax.swing.JFrame {
 
         grp_messageType.add(rb_broadcast);
         rb_broadcast.setForeground(new java.awt.Color(224, 224, 224));
+        rb_broadcast.setSelected(true);
         rb_broadcast.setText("broadcast");
         rb_broadcast.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,6 +191,7 @@ public class GUI_Main extends javax.swing.JFrame {
             }
         });
 
+        txf_sendTo.setEditable(false);
         txf_sendTo.setBackground(new java.awt.Color(224, 224, 224));
         txf_sendTo.setEnabled(false);
         txf_sendTo.addActionListener(new java.awt.event.ActionListener() {
@@ -322,9 +341,6 @@ public class GUI_Main extends javax.swing.JFrame {
 		
     }//GEN-LAST:event_txf_sendToActionPerformed
 
-		                                      
-
-
 	//given a message, print to textArea
 	public void recieve(String message)
 	{
@@ -335,7 +351,14 @@ public class GUI_Main extends javax.swing.JFrame {
 	{
 		if(m.getTag().equals("userList"))
 		{
-			all_users = new ArrayList<>(m.getUserList());
+		    all_users = new ArrayList<>(m.getUserList());
+		    System.out.println("DEBUG------- " + all_users.size());
+		    String[] temp = new String[all_users.size()];
+		    for(int i=0; i<all_users.size();i++)
+		    {
+			temp[i] = all_users.get(i).getUsername();
+		    }
+		    list_users.setListData(temp);
 		}
 	}
 	
@@ -378,7 +401,6 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JButton btn_attach;
     private javax.swing.JButton btn_send;
     private javax.swing.ButtonGroup grp_messageType;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -387,6 +409,7 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbl_ChatArea;
     private javax.swing.JLabel lbl_Heading;
+    private javax.swing.JList<String> list_users;
     private javax.swing.JRadioButton rb_broadcast;
     private javax.swing.JRadioButton rb_file;
     private javax.swing.JRadioButton rb_private;

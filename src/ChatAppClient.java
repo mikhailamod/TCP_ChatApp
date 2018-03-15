@@ -263,7 +263,8 @@ public class ChatAppClient implements Runnable
 		
 		else if (m.getTag().equals("userList"))
 		{
-			gui.recieve(m);
+		    System.out.println("DEBUG123 - " + m.getUserList().get(0));
+		    gui.recieve(m);
 		}
 
 		if(m.getTag().equals("end"))

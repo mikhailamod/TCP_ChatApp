@@ -56,7 +56,7 @@ public class ServerThread extends Thread
 	}
 
 	//server thread recieves a message and sends it to an output stream
-	public void recieveMessage(Message m)
+	public synchronized void recieveMessage(Message m)
 	{
 		try
 		{
@@ -72,55 +72,55 @@ public class ServerThread extends Thread
 		System.out.println("ServerThread running " + id);
 		while(running)//shouldnt be while true, should be a volatile boolean
 		{
-			try
+		    try
+		    {
+			Message m;
+			m = (Message)input.readObject();//read incoming message and cast into Message
+
+			//check tag of message. if it is "end" then close the socket
+			if(m.getTag().equals("end"))
 			{
-				Message m;
-				m = (Message)input.readObject();//read incoming message and cast into Message
+				//inform all clients that this client is leaving
+				String bye_text = m.getUser().getUsername() + " has left.";
+				System.out.println(bye_text);
+				m.setData(bye_text);
+				server.broadcast(id, m);
 
-				//check tag of message. if it is "end" then close the socket
-				if(m.getTag().equals("end"))
-				{
-					//inform all clients that this client is leaving
-					String bye_text = m.getUser().getUsername() + " has left.";
-					System.out.println(bye_text);
-					m.setData(bye_text);
-					server.broadcast(id, m);
-
-					//close IO
-					exit();
-				}
-
-				//this message will contain no data, only a User object which we will assign to activeUser
-				else if(m.getTag().equals("userTransfer"))
-				{
-					activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
-					System.out.println("USER WORKED");
-				}
-
-				//contains details of private message
-				else if(m.getTag().equals("private"))
-				{
-					System.out.print(id + " recieved private message:");//debug
-					System.out.println(m.toString());//print message to server console
-					server.privateMessage(id, m);
-				}
-				//else this message will be a broadcast
-				else
-				{
-					System.out.println(id + " recieved message:");//debug
-					System.out.println(m.toString());//print message to server console
-					server.broadcast(id, m);
-				}
-			} catch (IOException e) {
-				System.out.println("Error in ServerThread run(), IO");
-				System.out.println(e);
+				//close IO
 				exit();
-			} catch (ClassNotFoundException ee)
+			}
+
+			//this message will contain no data, only a User object which we will assign to activeUser
+			else if(m.getTag().equals("userTransfer"))
 			{
-				System.out.println("Error in ServerThread run(), Class error");
-				System.out.println(ee);
-				exit();
-			}//end catch
+			    activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
+			    server.updateUserList();
+			}
+
+			//contains details of private message
+			else if(m.getTag().equals("private"))
+			{
+				System.out.print(id + " recieved private message:");//debug
+				System.out.println(m.toString());//print message to server console
+				server.privateMessage(id, m);
+			}
+			//else this message will be a broadcast
+			else
+			{
+				System.out.println(id + " recieved message:");//debug
+				System.out.println(m.toString());//print message to server console
+				server.broadcast(id, m);
+			}
+		    } catch (IOException e) {
+			    System.out.println("Error in ServerThread run(), IO");
+			    System.out.println(e);
+			    exit();
+		    } catch (ClassNotFoundException ee)
+		    {
+			    System.out.println("Error in ServerThread run(), Class error");
+			    System.out.println(ee);
+			    exit();
+		    }//end catch
 		}//end while
 		
 	}//end run
