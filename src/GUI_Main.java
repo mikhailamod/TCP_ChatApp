@@ -35,7 +35,7 @@ public class GUI_Main extends javax.swing.JFrame {
 		activeUser = new User(username, server);
 		client = new ChatAppClient(server, port, username, this);
         initComponents();
-		lbl_Heading.setText("Welcome " + username);
+		lbl_Heading.setText("Welcome  " + username);
     }
     
 
