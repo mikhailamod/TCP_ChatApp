@@ -48,6 +48,12 @@ public class ServerThread extends Thread
 		}
 		
 	}
+	
+	//getters
+	public User getUser()
+	{
+		return activeUser;
+	}
 
 	//server thread recieves a message and sends it to an output stream
 	public void recieveMessage(Message m)

@@ -2,6 +2,7 @@
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -24,6 +25,7 @@ public class GUI_Main extends javax.swing.JFrame {
 	String messageType;
 	User activeUser;
 	ChatAppClient client;
+	ArrayList<User> all_users;
     /**
      * Creates new form ChatAppGUI
      */
@@ -33,6 +35,7 @@ public class GUI_Main extends javax.swing.JFrame {
         this.port = _port;
 		messageType = "broadcast";
 		activeUser = new User(username, server);
+		all_users = new ArrayList<>();
 		client = new ChatAppClient(server, port, username, this);
         initComponents();
 		lbl_Heading.setText("Welcome " + username);
@@ -228,12 +231,14 @@ public class GUI_Main extends javax.swing.JFrame {
 		else if(messageType.equals("broadcast"))
 		{
 			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("\nYou[broadcast]: " + userInput);
 			send("broadcast", userInput, "all");
 		}
 		else if(messageType.equals("private"))
 		{
 			String sendTo = txf_sendTo.getText();
 			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("\nYou[private to " + sendTo + "]: " + userInput);
 			send("private", userInput, sendTo);
 		}
 		else//send file
@@ -252,6 +257,14 @@ public class GUI_Main extends javax.swing.JFrame {
 	public void recieve(String message)
 	{
 		txa_ChatArea.append(message);
+	}
+	
+	public void recieve(Message m)
+	{
+		if(m.getTag().equals("userList"))
+		{
+			all_users = new ArrayList<>(m.getUserList());
+		}
 	}
 	
 	//given an input message, send to client class

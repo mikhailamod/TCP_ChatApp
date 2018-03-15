@@ -259,6 +259,11 @@ public class ChatAppClient implements Runnable
 		            m.outputFile(fname, ext);
 		            System.out.println("File Successfully Downloaded!");
         		}
+		}//end else if
+		
+		else if (m.getTag().equals("userList"))
+		{
+			gui.recieve(m);
 		}
 
 		if(m.getTag().equals("end"))

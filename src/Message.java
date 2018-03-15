@@ -9,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class Message implements Serializable
@@ -20,7 +21,8 @@ public class Message implements Serializable
 	private String filepath; //File's path
 	private User userFrom; //user that send the message
 	private String userTo;//for private message, user that will recieve this message. Set to all for broadcast
-
+	private ArrayList<User> userList;
+	
 	public Message(String data, User user)
 	{
 		this.data = data;
@@ -41,6 +43,13 @@ public class Message implements Serializable
 	{
 		this.data = data;
 	}
+	
+	public Message(ArrayList<User> userList)
+	{
+		data = "";
+		tag = "userList";
+		this.userList = new ArrayList<>(userList);
+	}
 
 	//getters
 	public byte[] getFile() { return file; }
@@ -49,6 +58,7 @@ public class Message implements Serializable
 	public User getUser(){ return userFrom; }
 	public String getTag(){ return tag; }
 	public String getUserTo(){ return userTo; }
+	public ArrayList<User> getUserList(){ return userList; }
 
 	//setters
 	public void setTag(String tag){ this.tag = tag; }
