@@ -55,11 +55,26 @@ public class ChatAppServer implements Runnable
 		System.out.println("User connected");
 		activeClients.add(new ServerThread(this, client));
 		activeClients.get(activeClients.size()-1).start();//start thread
+		ArrayList<User> userList = new ArrayList<>();
+		for(int i=0; i<activeClients.size();i++)
+		{
+			userList.add(activeClients.get(i).getUser());
+		}
+		
 	}//end addClient
 
 	public void removeClient(ServerThread client)
 	{	
 		activeClients.remove(client);
+	}
+	
+	public synchronized void sendUserList(ArrayList<User> userList)
+	{
+		Message m = new Message(userList);
+		for (int i = 0; i < activeClients.size(); i++)
+		{
+			activeClients.get(i).recieveMessage(m);
+		}
 	}
 
 	//if server receives a message tagged as 'private', send to relevant user.

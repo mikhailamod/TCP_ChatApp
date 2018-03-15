@@ -2,6 +2,7 @@
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -24,6 +25,7 @@ public class GUI_Main extends javax.swing.JFrame {
 	String messageType;
 	User activeUser;
 	ChatAppClient client;
+	ArrayList<User> all_users;
     /**
      * Creates new form ChatAppGUI
      */
@@ -33,6 +35,7 @@ public class GUI_Main extends javax.swing.JFrame {
         this.port = _port;
 		messageType = "broadcast";
 		activeUser = new User(username, server);
+		all_users = new ArrayList<>();
 		client = new ChatAppClient(server, port, username, this);
         initComponents();
 		lbl_Heading.setText("Welcome  " + username);
@@ -316,10 +319,48 @@ public class GUI_Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txf_sendToActionPerformed
 
+		boolean empty = txa_newMessage.getText().equals("");
+		if((!messageType.equals("file") && empty))//error prevention
+		{
+			JOptionPane.showMessageDialog(this, "No message was entered");
+		}
+		else if(messageType.equals("broadcast"))
+		{
+			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("\nYou[broadcast]: " + userInput);
+			send("broadcast", userInput, "all");
+		}
+		else if(messageType.equals("private"))
+		{
+			String sendTo = txf_sendTo.getText();
+			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("\nYou[private to " + sendTo + "]: " + userInput);
+			send("private", userInput, sendTo);
+		}
+		else//send file
+		{
+			String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
+			//TODO:call file attach methods
+		}
+		txa_newMessage.setText("");
+    }//GEN-LAST:event_btn_sendActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        client.shutdown();
+    }//GEN-LAST:event_formWindowClosing
+
 	//given a message, print to textArea
 	public void recieve(String message)
 	{
 		txa_ChatArea.append(message);
+	}
+	
+	public void recieve(Message m)
+	{
+		if(m.getTag().equals("userList"))
+		{
+			all_users = new ArrayList<>(m.getUserList());
+		}
 	}
 	
 	//given an input message, send to client class
