@@ -96,7 +96,7 @@ public class ChatAppServer implements Runnable
 	public static void main(String[] args) throws IOException
 	{
 		ChatAppServer main_server = null;
-		System.out.println("Starting Server");
+		System.out.println("Starting Server on " + ":"+args[0]  );
 		try
 		{
 			main_server = new ChatAppServer(Integer.parseInt(args[0]));
