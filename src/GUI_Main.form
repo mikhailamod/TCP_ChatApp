@@ -81,7 +81,6 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jScrollPane3" alignment="1" min="-2" pref="177" max="-2" attributes="0"/>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="lbl_ChatArea" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
               </Group>
@@ -205,12 +204,14 @@
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="296" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="rb_private" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txf_sendTo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rb_broadcast" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btn_attach" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="rb_file" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="rb_private" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txf_sendTo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="rb_broadcast" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="rb_file" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">

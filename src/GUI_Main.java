@@ -115,7 +115,6 @@ public class GUI_Main extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(lbl_ChatArea)
                 .addGap(66, 66, 66))
         );
@@ -229,12 +228,13 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rb_private)
-                    .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rb_broadcast)
-                    .addComponent(btn_attach)
-                    .addComponent(rb_file))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_attach, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rb_private)
+                        .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(rb_broadcast)
+                        .addComponent(rb_file)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,27 +271,29 @@ public class GUI_Main extends javax.swing.JFrame {
     private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
 
         boolean empty = txa_newMessage.getText().equals("");
-        if((!messageType.equals("file") && empty))//error prevention
-        {
-            JOptionPane.showMessageDialog(this, "No message was entered");
-        }
-        else if(messageType.equals("broadcast"))
-        {
-            String userInput = txa_newMessage.getText();
-            send("broadcast", userInput, "all");
-        }
-        else if(messageType.equals("private"))
-        {
-            String sendTo = txf_sendTo.getText();
-            String userInput = txa_newMessage.getText();
-            send("private", userInput, sendTo);
-        }
-        else//send file
-        {
-            String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
-            //TODO:call file attach methods
-        }
-        txa_newMessage.setText("");
+		if((!messageType.equals("file") && empty))//error prevention
+		{
+			JOptionPane.showMessageDialog(this, "No message was entered");
+		}
+		else if(messageType.equals("broadcast"))
+		{
+			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("\nYou[broadcast]: " + userInput);
+			send("broadcast", userInput, "all");
+		}
+		else if(messageType.equals("private"))
+		{
+			String sendTo = txf_sendTo.getText();
+			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("\nYou[private to " + sendTo + "]: " + userInput);
+			send("private", userInput, sendTo);
+		}
+		else//send file
+		{
+			String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
+			//TODO:call file attach methods
+		}
+		txa_newMessage.setText(""); 
     }//GEN-LAST:event_btn_sendActionPerformed
 
     private void rb_fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_fileActionPerformed
@@ -317,37 +319,11 @@ public class GUI_Main extends javax.swing.JFrame {
 
     private void txf_sendToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_sendToActionPerformed
         // TODO add your handling code here:
+		
     }//GEN-LAST:event_txf_sendToActionPerformed
 
-		boolean empty = txa_newMessage.getText().equals("");
-		if((!messageType.equals("file") && empty))//error prevention
-		{
-			JOptionPane.showMessageDialog(this, "No message was entered");
-		}
-		else if(messageType.equals("broadcast"))
-		{
-			String userInput = txa_newMessage.getText();
-			txa_ChatArea.append("\nYou[broadcast]: " + userInput);
-			send("broadcast", userInput, "all");
-		}
-		else if(messageType.equals("private"))
-		{
-			String sendTo = txf_sendTo.getText();
-			String userInput = txa_newMessage.getText();
-			txa_ChatArea.append("\nYou[private to " + sendTo + "]: " + userInput);
-			send("private", userInput, sendTo);
-		}
-		else//send file
-		{
-			String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
-			//TODO:call file attach methods
-		}
-		txa_newMessage.setText("");
-    }//GEN-LAST:event_btn_sendActionPerformed
+		                                      
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        client.shutdown();
-    }//GEN-LAST:event_formWindowClosing
 
 	//given a message, print to textArea
 	public void recieve(String message)
