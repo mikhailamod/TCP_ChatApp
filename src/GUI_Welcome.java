@@ -1,6 +1,8 @@
 
 import java.awt.TextField;
+import java.awt.event.KeyListener;
 import java.io.*;
+import javax.swing.SwingUtilities;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -12,7 +14,7 @@ import java.io.*;
  *
  * @author mikhail
  */
-public class GUI_Welcome extends javax.swing.JFrame {
+public class GUI_Welcome extends javax.swing.JFrame{
 
     //Attributes
     private boolean isSimple;
@@ -23,6 +25,8 @@ public class GUI_Welcome extends javax.swing.JFrame {
     public GUI_Welcome() {
         initComponents();
         isSimple = true;
+		SwingUtilities.getRootPane(this).setDefaultButton(btn_continue);
+		txf_username.requestFocus();
     }
 
     /**

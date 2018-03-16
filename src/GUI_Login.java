@@ -1,5 +1,6 @@
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,6 +28,7 @@ public class GUI_Login extends javax.swing.JFrame {
         this.mustRegister = mustRegister;
         initComponents();
         registerLook(mustRegister);
+		SwingUtilities.getRootPane(this).setDefaultButton(btn_login);
     }
     
 	//make text of password fields blank

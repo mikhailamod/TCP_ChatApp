@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicListUI;
@@ -55,6 +56,7 @@ public class GUI_Main extends javax.swing.JFrame {
 				}//end if
 			}//end method
 		});
+		SwingUtilities.getRootPane(this).setDefaultButton(btn_send);
     }
     
 
