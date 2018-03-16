@@ -27,7 +27,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         initComponents();
         ImageIcon i = new ImageIcon("back.jpg");
         jLabel2.setIcon(i);
-        
+        jPanel3.setVisible(false);
         isSimple = true;
 		SwingUtilities.getRootPane(this).setDefaultButton(btn_continue);
 		txf_username.requestFocus();
@@ -45,22 +45,26 @@ public class GUI_Welcome extends javax.swing.JFrame{
     private void initComponents() {
 
         grp_login = new javax.swing.ButtonGroup();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         rb_simple = new javax.swing.JRadioButton();
         lbl_username = new javax.swing.JLabel();
         rb_advanced = new javax.swing.JRadioButton();
-        lbl_server = new javax.swing.JLabel();
-        lbl_port = new javax.swing.JLabel();
         txf_username = new javax.swing.JTextField();
-        txf_port = new javax.swing.JTextField();
-        txf_server = new javax.swing.JTextField();
         btn_continue = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jPanel3 = new javax.swing.JPanel();
+        lbl_server = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
+        txf_server = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
+        txf_port = new javax.swing.JTextField();
+        lbl_port = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+
+        jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,15 +96,6 @@ public class GUI_Welcome extends javax.swing.JFrame{
             }
         });
 
-        lbl_server.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        lbl_server.setForeground(new java.awt.Color(240, 240, 240));
-        lbl_server.setText("Server IP:");
-        lbl_server.setBorder(null);
-
-        lbl_port.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        lbl_port.setForeground(new java.awt.Color(240, 240, 240));
-        lbl_port.setText("Port:");
-
         txf_username.setBackground(new java.awt.Color(16, 32, 39));
         txf_username.setForeground(new java.awt.Color(254, 254, 254));
         txf_username.setBorder(null);
@@ -109,18 +104,6 @@ public class GUI_Welcome extends javax.swing.JFrame{
                 txf_usernameActionPerformed(evt);
             }
         });
-
-        txf_port.setEditable(false);
-        txf_port.setBackground(new java.awt.Color(16, 32, 39));
-        txf_port.setForeground(new java.awt.Color(254, 254, 254));
-        txf_port.setBorder(null);
-        txf_port.setEnabled(false);
-
-        txf_server.setEditable(false);
-        txf_server.setBackground(new java.awt.Color(16, 32, 39));
-        txf_server.setForeground(new java.awt.Color(254, 254, 254));
-        txf_server.setBorder(null);
-        txf_server.setEnabled(false);
 
         btn_continue.setText("Continue");
         btn_continue.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +116,62 @@ public class GUI_Welcome extends javax.swing.JFrame{
         jLabel1.setForeground(new java.awt.Color(254, 254, 254));
         jLabel1.setText("Welcome to ChatApp");
 
+        jPanel3.setBackground(new java.awt.Color(16, 32, 39));
+
+        lbl_server.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        lbl_server.setForeground(new java.awt.Color(240, 240, 240));
+        lbl_server.setText("Server IP:");
+        lbl_server.setBorder(null);
+
+        txf_server.setEditable(false);
+        txf_server.setBackground(new java.awt.Color(16, 32, 39));
+        txf_server.setForeground(new java.awt.Color(254, 254, 254));
+        txf_server.setBorder(null);
+        txf_server.setEnabled(false);
+
+        txf_port.setEditable(false);
+        txf_port.setBackground(new java.awt.Color(16, 32, 39));
+        txf_port.setForeground(new java.awt.Color(254, 254, 254));
+        txf_port.setBorder(null);
+        txf_port.setEnabled(false);
+
+        lbl_port.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        lbl_port.setForeground(new java.awt.Color(240, 240, 240));
+        lbl_port.setText("Port:");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lbl_server)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(lbl_port)
+                    .addComponent(txf_server, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txf_port))
+                .addContainerGap(72, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_server)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txf_server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_port)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -143,27 +182,21 @@ public class GUI_Welcome extends javax.swing.JFrame{
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rb_simple)
-                                    .addComponent(lbl_server))
+                                .addComponent(rb_simple)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rb_advanced))
                             .addComponent(lbl_username, javax.swing.GroupLayout.Alignment.LEADING))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSeparator2)
-                            .addComponent(txf_server, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn_continue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
                             .addComponent(txf_username)
-                            .addComponent(jSeparator1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(lbl_port)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txf_port, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jSeparator1))
                         .addGap(74, 74, 74))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,20 +214,10 @@ public class GUI_Welcome extends javax.swing.JFrame{
                     .addComponent(rb_simple)
                     .addComponent(rb_advanced))
                 .addGap(18, 18, 18)
-                .addComponent(lbl_server)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txf_server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_port)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
                 .addComponent(btn_continue)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -228,6 +251,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
     private void rb_simpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_simpleActionPerformed
         // TODO add your handling code here:
+        jPanel3.setVisible(false);
         txf_server.setVisible(false);
         txf_port.setVisible(false);
         txf_server.setEditable(false);
@@ -239,6 +263,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
     private void rb_advancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_advancedActionPerformed
         // TODO add your handling code here:
+        jPanel3.setVisible(true);
         txf_server.setVisible(true);
         txf_port.setVisible(true);
         txf_server.setEditable(true);
@@ -335,10 +360,12 @@ public class GUI_Welcome extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_continue;
     private javax.swing.ButtonGroup grp_login;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
