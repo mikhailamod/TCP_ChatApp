@@ -3,6 +3,7 @@ import java.awt.TextField;
 import java.awt.event.KeyListener;
 import java.io.*;
 import javax.swing.SwingUtilities;
+import javax.swing.ImageIcon;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,9 +25,14 @@ public class GUI_Welcome extends javax.swing.JFrame{
      */
     public GUI_Welcome() {
         initComponents();
+        ImageIcon i = new ImageIcon("back.jpg");
+        jLabel2.setIcon(i);
+        
         isSimple = true;
 		SwingUtilities.getRootPane(this).setDefaultButton(btn_continue);
 		txf_username.requestFocus();
+                
+                
     }
 
     /**
@@ -40,34 +46,27 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
         grp_login = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        lbl_username = new javax.swing.JLabel();
-        txf_username = new javax.swing.JTextField();
-        btn_continue = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         rb_simple = new javax.swing.JRadioButton();
+        lbl_username = new javax.swing.JLabel();
         rb_advanced = new javax.swing.JRadioButton();
         lbl_server = new javax.swing.JLabel();
         lbl_port = new javax.swing.JLabel();
+        txf_username = new javax.swing.JTextField();
         txf_port = new javax.swing.JTextField();
         txf_server = new javax.swing.JTextField();
+        btn_continue = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(98, 114, 123));
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel1.setText("Welcome to ChatApp");
-
-        lbl_username.setForeground(new java.awt.Color(240, 240, 240));
-        lbl_username.setText("Username:");
-
-        btn_continue.setText("Continue");
-        btn_continue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_continueActionPerformed(evt);
-            }
-        });
+        jPanel2.setBackground(new java.awt.Color(28, 49, 58));
 
         grp_login.add(rb_simple);
         rb_simple.setForeground(new java.awt.Color(240, 240, 240));
@@ -79,6 +78,10 @@ public class GUI_Welcome extends javax.swing.JFrame{
             }
         });
 
+        lbl_username.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        lbl_username.setForeground(new java.awt.Color(240, 240, 240));
+        lbl_username.setText("Username:");
+
         grp_login.add(rb_advanced);
         rb_advanced.setForeground(new java.awt.Color(240, 240, 240));
         rb_advanced.setText("Advanced");
@@ -88,71 +91,124 @@ public class GUI_Welcome extends javax.swing.JFrame{
             }
         });
 
+        lbl_server.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         lbl_server.setForeground(new java.awt.Color(240, 240, 240));
         lbl_server.setText("Server IP:");
+        lbl_server.setBorder(null);
 
+        lbl_port.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         lbl_port.setForeground(new java.awt.Color(240, 240, 240));
         lbl_port.setText("Port:");
 
+        txf_username.setBackground(new java.awt.Color(28, 49, 58));
+        txf_username.setForeground(new java.awt.Color(254, 254, 254));
+        txf_username.setBorder(null);
+        txf_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txf_usernameActionPerformed(evt);
+            }
+        });
+
         txf_port.setEditable(false);
+        txf_port.setBackground(new java.awt.Color(28, 49, 58));
+        txf_port.setForeground(new java.awt.Color(254, 254, 254));
+        txf_port.setBorder(null);
         txf_port.setEnabled(false);
 
         txf_server.setEditable(false);
+        txf_server.setBackground(new java.awt.Color(28, 49, 58));
+        txf_server.setForeground(new java.awt.Color(254, 254, 254));
+        txf_server.setBorder(null);
         txf_server.setEnabled(false);
+
+        btn_continue.setText("Continue");
+        btn_continue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_continueActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel1.setText("Welcome to ChatApp");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rb_simple)
+                                    .addComponent(lbl_server))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rb_advanced))
+                            .addComponent(lbl_username, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator2)
+                            .addComponent(txf_server, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_continue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                            .addComponent(txf_username)
+                            .addComponent(jSeparator1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(lbl_port)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txf_port, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(74, 74, 74))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel1)
+                .addGap(32, 32, 32)
+                .addComponent(lbl_username)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txf_username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rb_simple)
+                    .addComponent(rb_advanced))
+                .addGap(18, 18, 18)
+                .addComponent(lbl_server)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txf_server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_port)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_continue)
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(lbl_port)
-                        .addGap(56, 56, 56)
-                        .addComponent(txf_port, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lbl_username)
-                        .addGap(18, 18, 18)
-                        .addComponent(txf_username, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rb_simple)
-                            .addComponent(lbl_server))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(txf_server))
-                            .addComponent(rb_advanced))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(btn_continue)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_username)
-                    .addComponent(txf_username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rb_simple)
-                    .addComponent(rb_advanced))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_server)
-                    .addComponent(txf_server, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_continue)
-                    .addComponent(lbl_port)
-                    .addComponent(txf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -171,6 +227,8 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
     private void rb_simpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_simpleActionPerformed
         // TODO add your handling code here:
+        txf_server.setVisible(false);
+        txf_port.setVisible(false);
         txf_server.setEditable(false);
         txf_server.setEnabled(false);
         txf_port.setEditable(false);
@@ -180,6 +238,8 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
     private void rb_advancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_advancedActionPerformed
         // TODO add your handling code here:
+        txf_server.setVisible(true);
+        txf_port.setVisible(true);
         txf_server.setEditable(true);
         txf_port.setEditable(true);
         txf_server.setEnabled(true);
@@ -214,6 +274,10 @@ public class GUI_Welcome extends javax.swing.JFrame{
         }
         
     }//GEN-LAST:event_btn_continueActionPerformed
+
+    private void txf_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txf_usernameActionPerformed
 
     
     //Returns hostname
@@ -271,7 +335,12 @@ public class GUI_Welcome extends javax.swing.JFrame{
     private javax.swing.JButton btn_continue;
     private javax.swing.ButtonGroup grp_login;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lbl_port;
     private javax.swing.JLabel lbl_server;
     private javax.swing.JLabel lbl_username;
