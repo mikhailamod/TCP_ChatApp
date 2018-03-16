@@ -66,7 +66,8 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
         jPanel1.setBackground(new java.awt.Color(98, 114, 123));
 
-        jPanel2.setBackground(new java.awt.Color(28, 49, 58));
+        jPanel2.setBackground(new java.awt.Color(16, 32, 39));
+        jPanel2.setBorder(null);
 
         grp_login.add(rb_simple);
         rb_simple.setForeground(new java.awt.Color(240, 240, 240));
@@ -100,7 +101,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         lbl_port.setForeground(new java.awt.Color(240, 240, 240));
         lbl_port.setText("Port:");
 
-        txf_username.setBackground(new java.awt.Color(28, 49, 58));
+        txf_username.setBackground(new java.awt.Color(16, 32, 39));
         txf_username.setForeground(new java.awt.Color(254, 254, 254));
         txf_username.setBorder(null);
         txf_username.addActionListener(new java.awt.event.ActionListener() {
@@ -110,13 +111,13 @@ public class GUI_Welcome extends javax.swing.JFrame{
         });
 
         txf_port.setEditable(false);
-        txf_port.setBackground(new java.awt.Color(28, 49, 58));
+        txf_port.setBackground(new java.awt.Color(16, 32, 39));
         txf_port.setForeground(new java.awt.Color(254, 254, 254));
         txf_port.setBorder(null);
         txf_port.setEnabled(false);
 
         txf_server.setEditable(false);
-        txf_server.setBackground(new java.awt.Color(28, 49, 58));
+        txf_server.setBackground(new java.awt.Color(16, 32, 39));
         txf_server.setForeground(new java.awt.Color(254, 254, 254));
         txf_server.setBorder(null);
         txf_server.setEnabled(false);

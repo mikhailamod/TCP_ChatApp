@@ -108,12 +108,12 @@ public class GUI_Main extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel2.setBackground(new java.awt.Color(55, 71, 79));
+        jPanel2.setBackground(new java.awt.Color(16, 32, 39));
         jPanel2.setBorder(null);
 
         jScrollPane3.setBorder(null);
 
-        list_users.setBackground(new java.awt.Color(55, 71, 79));
+        list_users.setBackground(new java.awt.Color(16, 32, 39));
         list_users.setBorder(null);
         list_users.setForeground(new java.awt.Color(254, 254, 254));
         list_users.setModel(new javax.swing.AbstractListModel<String>() {
@@ -147,7 +147,7 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addGap(0, 0, 0))
         );
 
-        jPanel3.setBackground(new java.awt.Color(98, 114, 123));
+        jPanel3.setBackground(new java.awt.Color(55, 71, 79));
         jPanel3.setBorder(null);
 
         btn_send.setText("Send");
