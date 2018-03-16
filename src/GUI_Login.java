@@ -1,4 +1,5 @@
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -21,14 +22,17 @@ public class GUI_Login extends javax.swing.JFrame {
     boolean mustRegister;
     
     public GUI_Login(String username, String server, int port, boolean mustRegister) {
+        
         this.username = username;
         this.server = server;
         this.port = port;
         isSimple = false;
         this.mustRegister = mustRegister;
         initComponents();
+        ImageIcon i = new ImageIcon("back.jpg");
+        jLabel3.setIcon(i);
         registerLook(mustRegister);
-		SwingUtilities.getRootPane(this).setDefaultButton(btn_login);
+	SwingUtilities.getRootPane(this).setDefaultButton(btn_login);
     }
     
 	//make text of password fields blank
@@ -41,11 +45,13 @@ public class GUI_Login extends javax.swing.JFrame {
         {
             lbl_confirm.setVisible(true);
             pf_confirm.setVisible(true);
+            jSeparator2.setVisible(true);
         }
         else
         {
             lbl_confirm.setVisible(false);
             pf_confirm.setVisible(false);
+            jSeparator2.setVisible(false);
         }
     }
 
@@ -59,26 +65,46 @@ public class GUI_Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lbl_confirm = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         pf_password = new javax.swing.JPasswordField();
-        btn_login = new javax.swing.JButton();
-        lbl_confirm = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         pf_confirm = new javax.swing.JPasswordField();
+        btn_login = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(375, 217));
-        setSize(new java.awt.Dimension(375, 217));
+        setSize(new java.awt.Dimension(873, 457));
 
         jPanel1.setBackground(new java.awt.Color(98, 114, 123));
         jPanel1.setBorder(null);
 
+        jPanel2.setBackground(new java.awt.Color(16, 32, 39));
+        jPanel2.setBorder(null);
+        jPanel2.setMinimumSize(new java.awt.Dimension(422, 449));
+
+        lbl_confirm.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        lbl_confirm.setForeground(new java.awt.Color(240, 240, 240));
+        lbl_confirm.setText("Confirm Password:");
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(240, 240, 240));
+        jLabel2.setText("Password:");
+
+        pf_password.setBackground(new java.awt.Color(16, 32, 39));
+        pf_password.setBorder(null);
+
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(240, 240, 240));
         jLabel1.setText("Login");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jLabel2.setForeground(new java.awt.Color(240, 240, 240));
-        jLabel2.setText("Password:");
+        pf_confirm.setBackground(new java.awt.Color(16, 32, 39));
+        pf_confirm.setBorder(null);
 
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
@@ -87,55 +113,91 @@ public class GUI_Login extends javax.swing.JFrame {
             }
         });
 
-        lbl_confirm.setForeground(new java.awt.Color(240, 240, 240));
-        lbl_confirm.setText("Confirm Password:");
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(83, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pf_password, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addContainerGap(69, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                            .addComponent(jSeparator1)
+                            .addComponent(jLabel2)
+                            .addComponent(lbl_confirm)
+                            .addComponent(pf_confirm)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pf_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_confirm)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pf_confirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_login)
+                    .addComponent(jButton1))
+                .addContainerGap(235, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(lbl_confirm))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pf_password, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pf_confirm, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 15, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(pf_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_confirm)
-                    .addComponent(pf_confirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_login)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        jLabel3.setBackground(new java.awt.Color(76, 76, 76));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel3.setBorder(null);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -143,38 +205,42 @@ public class GUI_Login extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
-		if(!mustRegister)
-		{
-			String pass = new String(pf_password.getPassword());
-			if(!login(this.username, pass))//entered incorrect password
-			{
-			JOptionPane.showMessageDialog(this, "Password incorrect");
-			pf_password.setText("");
-			}//end if login
-			else//entered correct password, log them in
-			{
-			new GUI_Main(username, server, port).setVisible(true);
-			this.dispose();
-			}
-		}//end if
-		else//user must first register
-		{
-			String pass = new String(pf_password.getPassword());
-			String pass2 = new String(pf_confirm.getPassword());
-			if(pass.equals(pass2))//password match, attempt to register
-			{
-				register(username, pass);
-				new GUI_Main(username, server, port).setVisible(true);
-				this.dispose();
-			}
-			else//password dont match
-			{
-				JOptionPane.showMessageDialog(this, "Passwords do not match!");
-				pf_password.setText("");
-				pf_confirm.setText("");
-			}//end else
-		}//end else  
+        if(!mustRegister)
+        {
+            String pass = new String(pf_password.getPassword());
+            if(!login(this.username, pass))//entered incorrect password
+            {
+                JOptionPane.showMessageDialog(this, "Password incorrect");
+                pf_password.setText("");
+            }//end if login
+            else//entered correct password, log them in
+            {
+                new GUI_Main(username, server, port).setVisible(true);
+                this.dispose();
+            }
+        }//end if
+        else//user must first register
+        {
+            String pass = new String(pf_password.getPassword());
+            String pass2 = new String(pf_confirm.getPassword());
+            if(pass.equals(pass2))//password match, attempt to register
+            {
+                register(username, pass);
+                new GUI_Main(username, server, port).setVisible(true);
+                this.dispose();
+            }
+            else//password dont match
+            {
+                JOptionPane.showMessageDialog(this, "Passwords do not match!");
+                pf_password.setText("");
+                pf_confirm.setText("");
+            }//end else
+        }//end else
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     //given a username and password, use AuthManager to check if user can log in
     public static boolean login(String username, String password)
@@ -225,9 +291,14 @@ public class GUI_Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_login;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lbl_confirm;
     private javax.swing.JPasswordField pf_confirm;
     private javax.swing.JPasswordField pf_password;
