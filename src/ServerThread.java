@@ -129,9 +129,11 @@ public class ServerThread extends Thread
 	{
 		try
 		{
+			
 			output.close(); //close output stream
 			client.close(); //close socket
 			server.removeClient(this); //remove this thread from the arraylist
+			server.updateUserList();
 			running=false; //exit loop
 		}
 		catch(IOException ioe)

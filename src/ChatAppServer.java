@@ -62,7 +62,7 @@ public class ChatAppServer implements Runnable
 	    ArrayList<User> userList = new ArrayList<>();
 	    for(int i=0; i<activeClients.size();i++)
 	    {
-			System.out.println("User is: " + activeClients.get(i).getUser());
+			//System.out.println("User is: " + activeClients.get(i).getUser());
 			userList.add(activeClients.get(i).getUser());
 	    }
 	    //System.out.println("DEBUG!!: " + userList.size());

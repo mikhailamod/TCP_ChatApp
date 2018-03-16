@@ -53,9 +53,13 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(98, 114, 123));
+
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(254, 254, 254));
         jLabel1.setText("Welcome to ChatApp");
 
+        lbl_username.setForeground(new java.awt.Color(240, 240, 240));
         lbl_username.setText("Username:");
 
         btn_continue.setText("Continue");
@@ -66,6 +70,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         });
 
         grp_login.add(rb_simple);
+        rb_simple.setForeground(new java.awt.Color(240, 240, 240));
         rb_simple.setSelected(true);
         rb_simple.setText("Simple");
         rb_simple.addActionListener(new java.awt.event.ActionListener() {
@@ -75,6 +80,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         });
 
         grp_login.add(rb_advanced);
+        rb_advanced.setForeground(new java.awt.Color(240, 240, 240));
         rb_advanced.setText("Advanced");
         rb_advanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,8 +88,10 @@ public class GUI_Welcome extends javax.swing.JFrame{
             }
         });
 
+        lbl_server.setForeground(new java.awt.Color(240, 240, 240));
         lbl_server.setText("Server IP:");
 
+        lbl_port.setForeground(new java.awt.Color(240, 240, 240));
         lbl_port.setText("Port:");
 
         txf_port.setEditable(false);
