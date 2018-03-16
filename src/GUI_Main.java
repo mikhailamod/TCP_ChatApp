@@ -297,14 +297,14 @@ public class GUI_Main extends javax.swing.JFrame {
 		else if(messageType.equals("broadcast"))
 		{
 			String userInput = txa_newMessage.getText();
-			txa_ChatArea.append("\nYou[broadcast]: " + userInput);
+			txa_ChatArea.append("You[broadcast]: " + userInput + "\n");
 			send("broadcast", userInput, "all");
 		}
 		else if(messageType.equals("private"))
 		{
 			String sendTo = txf_sendTo.getText();
 			String userInput = txa_newMessage.getText();
-			txa_ChatArea.append("\nYou[private to " + sendTo + "]: " + userInput);
+			txa_ChatArea.append("You[private to " + sendTo + "]: " + userInput + "\n");
 			send("private", userInput, sendTo);
 		}
 		else//send file
