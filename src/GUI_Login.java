@@ -20,8 +20,9 @@ public class GUI_Login extends javax.swing.JFrame {
     int port;
     boolean isSimple;
     boolean mustRegister;
+    GUI_Welcome welcome;
     
-    public GUI_Login(String username, String server, int port, boolean mustRegister) {
+    public GUI_Login(String username, String server, int port, boolean mustRegister, GUI_Welcome wel) {
         
         this.username = username;
         this.server = server;
@@ -33,6 +34,7 @@ public class GUI_Login extends javax.swing.JFrame {
         jLabel3.setIcon(i);
         registerLook(mustRegister);
 	SwingUtilities.getRootPane(this).setDefaultButton(btn_login);
+        welcome=wel;
     }
     
 	//make text of password fields blank
@@ -247,6 +249,8 @@ public class GUI_Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        welcome.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     //given a username and password, use AuthManager to check if user can log in

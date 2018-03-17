@@ -19,6 +19,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
     //Attributes
     private boolean isSimple;
+    GUI_Login login;
     private static int PORT_NUMBER = 6000;
     /**
      * Creates new form GUI_Login
@@ -287,21 +288,29 @@ public class GUI_Welcome extends javax.swing.JFrame{
             server = getHostName(port);
             
         }
-        if(AuthManager.exists(username))//if username exists, make them login
+        
+        if(login==null)
         {
-            this.setVisible(false);
-            GUI_Login login;
-	    login =new GUI_Login(username,server, port, false);
-            login.setVisible(true);
-            login.setBounds(this.getBounds());
+            if(AuthManager.exists(username))//if username exists, make them login
+            {
+                this.setVisible(false);
+
+                login =new GUI_Login(username,server, port, false, this);
+                login.setVisible(true);
+                login.setBounds(this.getBounds());
+            }
+            else
+            {
+                this.setVisible(false);
+                login =new GUI_Login(username,server, port, true, this);
+                login.setVisible(true);
+                login.setBounds(this.getBounds());
+            }
         }
         else
         {
-	    this.setVisible(false);
-	    GUI_Login login;
-	    login =new GUI_Login(username,server, port, true);
+            this.setVisible(false);
             login.setVisible(true);
-            login.setBounds(this.getBounds());
         }
         
     }//GEN-LAST:event_btn_continueActionPerformed
