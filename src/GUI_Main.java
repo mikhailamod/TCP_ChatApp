@@ -10,6 +10,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicListUI;
 import javax.swing.plaf.basic.BasicListUI.ListSelectionHandler;
+import javax.swing.JFileChooser;
+import java.io.File;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,6 +26,7 @@ import javax.swing.plaf.basic.BasicListUI.ListSelectionHandler;
 public class GUI_Main extends javax.swing.JFrame {
     
     //attributes
+    String fileurl="";
     String server;
     String username;
     int port;
@@ -177,6 +180,11 @@ public class GUI_Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txa_ChatArea);
 
         btn_attach.setText("Attach File");
+        btn_attach.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_attachActionPerformed(evt);
+            }
+        });
 
         txa_newMessage.setBackground(new java.awt.Color(224, 224, 224));
         txa_newMessage.setColumns(20);
@@ -286,6 +294,7 @@ public class GUI_Main extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         client.shutdown();
     }//GEN-LAST:event_formWindowClosing
+ 
 
     private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
 
@@ -309,8 +318,20 @@ public class GUI_Main extends javax.swing.JFrame {
 		}
 		else//send file
 		{
-			String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
-			//TODO:call file attach methods
+                    //String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
+                    if(fileurl!="") {
+                        //send("broadcast", fileurl, "all");
+                        try {
+                            client.send(fileurl, txf_sendTo.getText());
+                        }
+                       catch(Exception e) {
+                           
+                       }
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(this, "No file was selected");
+                    }
+                            //TODO:call file attach methods
 		}
 		txa_newMessage.setText(""); 
     }//GEN-LAST:event_btn_sendActionPerformed
@@ -340,6 +361,17 @@ public class GUI_Main extends javax.swing.JFrame {
         // TODO add your handling code here:
 		
     }//GEN-LAST:event_txf_sendToActionPerformed
+
+    private void btn_attachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_attachActionPerformed
+        final JFileChooser fc;
+        fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(GUI_Main.this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            fileurl = file.getAbsolutePath();
+        }
+    }//GEN-LAST:event_btn_attachActionPerformed
 
 	//given a message, print to textArea
 	public void recieve(String message)
