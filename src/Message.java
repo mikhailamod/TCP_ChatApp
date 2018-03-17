@@ -64,23 +64,20 @@ public class Message implements Serializable
 	public void setTag(String tag){ this.tag = tag; }
 	public void setData(String data){this.data = data; }
 	public void setUserTo(String user){this.userTo = user; }
-
-
-	public void setFile(byte[] file){
+	public void setFile(byte[] file)
+	{
 		this.file = Arrays.copyOf(file, file.length);
 	}
-
-
+	
 	//Outputs file to the received directory
-	public void outputFile(String name, String ext) {
+	public void outputFile(String saveDest, String name, String ext) {
         try {
-
         	//get directory of output
             String dir = name.substring(0, name.lastIndexOf("/")) + "/received/";
             String fname = name.substring(name.lastIndexOf("/") + 1, name.lastIndexOf("."));
 
             //output file to directory
-            FileOutputStream fileoutputstream = new FileOutputStream("../received/" + fname + "" + ext);
+            FileOutputStream fileoutputstream = new FileOutputStream(saveDest + fname + "" + ext);
             fileoutputstream.write(this.file);
             fileoutputstream.close();
             //optional command to open up video

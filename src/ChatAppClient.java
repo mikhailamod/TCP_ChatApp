@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class ChatAppClient implements Runnable {
@@ -157,7 +158,7 @@ public class ChatAppClient implements Runnable {
         }
     }
 
-    //given a message type, data and intended receipient, write to OutputStream
+    //Overloaded send function for files
     public void send(String in, String sendTo) throws IOException {
 
         Message m = null;
@@ -204,58 +205,83 @@ public class ChatAppClient implements Runnable {
     //Given a Message obj, send to GUI with relevant output
     public void recieve(Message m) {
         //for broadcasts
-        if (m.getTag().equals("broadcast")) {
+        if (m.getTag().equals("broadcast"))
+		{
             gui.recieve("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
             //System.out.println("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
         } //for user to user message
-        else if (m.getTag().equals("private")) {
+        else if (m.getTag().equals("private"))
+		{
             gui.recieve("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
             //System.out.println("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
         } //for image broadcast
-        else if (m.getTag().equals("image")) {
-            //System.out.println(" + "\n");
-
-            int decision = JOptionPane.showConfirmDialog(null, m.getUser().getUsername() + " wants to send you an image. Do you accept?");
+        else if (m.getTag().equals("image"))
+		{
+			String dialogMessage = m.getUser().getUsername() + " wants to send you an image. Do you accept?";
+            int decision = JOptionPane.showConfirmDialog(null, dialogMessage, "File transfer request", JOptionPane.YES_NO_OPTION);
             //checks if user wants to accept the file
-            //boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
             if (decision == JOptionPane.YES_OPTION) {
                 try {
                     //turns byte array from received file into a stream
                     ByteArrayInputStream bis = new ByteArrayInputStream(m.getFile());
                     //must convert to bufferedimage in order to display
                     BufferedImage img = ImageIO.read(bis);
-                    //jframe created with icon to display image .. will work on dimensions etc int the GUI stage
+                    //jframe created with icon to display image
                     ImageIcon icon = new ImageIcon(img);
+					int height = icon.getIconHeight();
+					int width = icon.getIconWidth();
+					
                     JFrame frame = new JFrame();
                     frame.setLayout(new FlowLayout());
-                    frame.setSize(500, 500);
+                    frame.setSize(height, width);
+					
                     JLabel lbl = new JLabel();
                     lbl.setIcon(icon);
+					
+					frame.setTitle("Image from " + m.getUser().getUsername());
                     frame.add(lbl);
                     frame.setVisible(true);
-                } catch (Exception e) {
-
+                } catch (IOException e)
+				{
+					System.out.println("Error in displaying image");
+					gui.displayError(e, "Error in displaying image");
                 }
             }
-        } else if (m.getTag().equals("video")) {
-            int decision = JOptionPane.showConfirmDialog(null, m.getUser().getUsername() + " wants to send you a video. Do you accept?");
+        } else if (m.getTag().equals("video"))
+		{
+            String dialogMessage = m.getUser().getUsername() + " wants to send you an video. Do you accept?";
+            int decision = JOptionPane.showConfirmDialog(null, dialogMessage, "File transfer request", JOptionPane.YES_NO_OPTION);
             //checks if user wants to accept the file
-            //boolean decision = (kb.nextLine().substring(0, 1).equalsIgnoreCase("y"));
             if (decision == JOptionPane.YES_OPTION) {
                 //get file with file path and start downloading it
+				//get save destination
+				String saveDest = "";
+				final JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showSaveDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					saveDest = file.getAbsolutePath();
+				}
+				
+				//get file from message
                 String fname = m.getFilepath();
                 String ext = fname.substring(m.getFilepath().lastIndexOf("."));
-                System.out.println("Receiving Video File!");
-                m.outputFile(fname, ext);
+                
+				System.out.println("Receiving Video File...");
+				gui.recieve("Receiving Video File...");
+                m.outputFile(saveDest, fname, ext);
                 System.out.println("File Successfully Downloaded!");
+				gui.recieve("File Successfully Downloaded to " + saveDest);
             }
         }//end else if
-        else if (m.getTag().equals("userList")) {
-            System.out.println("DEBUG123 - " + m.getUserList().get(0));
+        else if (m.getTag().equals("userList"))
+		{
+            System.out.println("Recieving user list - " + m.getUserList().get(0));
             gui.recieve(m);
         }
 
-        if (m.getTag().equals("end")) {
+		else if (m.getTag().equals("end"))
+		{
             System.out.println(m.toString());
         }
 

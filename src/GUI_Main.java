@@ -47,7 +47,7 @@ public class GUI_Main extends javax.swing.JFrame {
 		client = new ChatAppClient(server, port, username, this);
 		initComponents();
 		//lbl_Heading.setText("Welcome  " + username);
-                this.setTitle("Welcome  " + username);
+        this.setTitle("Welcome  " + username);
 		messageType = "broadcast";
 		btn_attach.setEnabled(false);
 		txf_sendTo.setEnabled(false);
@@ -398,6 +398,11 @@ public class GUI_Main extends javax.swing.JFrame {
 	public void send(String type, String message, String sendTo)
 	{
 		client.send(type, message, sendTo);
+	}
+	
+	public void displayError(Exception e, String title)
+	{
+		JOptionPane.showMessageDialog(this, e.toString(), title, JOptionPane.ERROR_MESSAGE);
 	}
 /*
     public static void main(String args[]) {

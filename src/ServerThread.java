@@ -106,7 +106,7 @@ public class ServerThread extends Thread
 				}
 				
 				//TODO - change to else if for broadcast and file. last else must catch corrupted message.
-				else if(m.getTag().equals("broadcast") || m.getTag().equals("image"))
+				else if(m.getTag().equals("broadcast") || m.getTag().equals("image") || m.getTag().equals("video"))
 				{
 					System.out.println(id + " recieved broadcast message:");//debug
 					System.out.println(m.toString());//print message to server console
