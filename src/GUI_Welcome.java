@@ -126,12 +126,19 @@ public class GUI_Welcome extends javax.swing.JFrame{
         txf_server.setEditable(false);
         txf_server.setBackground(new java.awt.Color(16, 32, 39));
         txf_server.setForeground(new java.awt.Color(254, 254, 254));
+        txf_server.setText("165.227.232.44");
         txf_server.setBorder(null);
         txf_server.setEnabled(false);
+        txf_server.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txf_serverActionPerformed(evt);
+            }
+        });
 
         txf_port.setEditable(false);
         txf_port.setBackground(new java.awt.Color(16, 32, 39));
         txf_port.setForeground(new java.awt.Color(254, 254, 254));
+        txf_port.setText("6000");
         txf_port.setBorder(null);
         txf_port.setEnabled(false);
 
@@ -318,6 +325,10 @@ public class GUI_Welcome extends javax.swing.JFrame{
     private void txf_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_usernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txf_usernameActionPerformed
+
+    private void txf_serverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_serverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txf_serverActionPerformed
 
     
     //Returns hostname
