@@ -31,6 +31,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         isSimple = true;
 		SwingUtilities.getRootPane(this).setDefaultButton(btn_continue);
 		txf_username.requestFocus();
+        
                 
                 
     }
@@ -71,7 +72,6 @@ public class GUI_Welcome extends javax.swing.JFrame{
         jPanel1.setBackground(new java.awt.Color(98, 114, 123));
 
         jPanel2.setBackground(new java.awt.Color(16, 32, 39));
-        jPanel2.setBorder(null);
 
         grp_login.add(rb_simple);
         rb_simple.setForeground(new java.awt.Color(240, 240, 240));
@@ -114,14 +114,13 @@ public class GUI_Welcome extends javax.swing.JFrame{
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel1.setText("Welcome to ChatApp");
+        jLabel1.setText("  Welcome to ChatApp");
 
         jPanel3.setBackground(new java.awt.Color(16, 32, 39));
 
         lbl_server.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         lbl_server.setForeground(new java.awt.Color(240, 240, 240));
         lbl_server.setText("Server IP:");
-        lbl_server.setBorder(null);
 
         txf_server.setEditable(false);
         txf_server.setBackground(new java.awt.Color(16, 32, 39));
@@ -217,7 +216,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(btn_continue)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -336,14 +335,19 @@ public class GUI_Welcome extends javax.swing.JFrame{
 	    }
     }//end getHostName
     public static void main(String args[]) {
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
-        } catch (ClassNotFoundException ex) {
+            }*/
+        try { 
+    javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"); 
+} catch (Exception ex) { 
+    ex.printStackTrace(); 
+}
+        /*} catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -351,7 +355,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
             java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         //</editor-fold>
         //</editor-fold>
         //get user info
