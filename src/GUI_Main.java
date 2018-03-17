@@ -318,19 +318,19 @@ public class GUI_Main extends javax.swing.JFrame {
 		}
 		else//send file
 		{
-                    //String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
-                    if(fileurl!="") {
-                        //send("broadcast", fileurl, "all");
-                        try {
-                            client.send(fileurl, txf_sendTo.getText());
-                        }
-                       catch(Exception e) {
-                           
-                       }
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(this, "No file was selected");
-                    }
+            //String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
+            if(fileurl!="") {
+                //send("broadcast", fileurl, "all");
+                try {
+                    client.send(fileurl, txf_sendTo.getText());
+                }
+               catch(Exception e) {
+                   
+               }
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "No file was selected");
+            }
                             //TODO:call file attach methods
 		}
 		txa_newMessage.setText(""); 
