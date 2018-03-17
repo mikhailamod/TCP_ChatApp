@@ -46,7 +46,8 @@ public class GUI_Main extends javax.swing.JFrame {
 		all_users = new ArrayList<>();
 		client = new ChatAppClient(server, port, username, this);
 		initComponents();
-		lbl_Heading.setText("Welcome  " + username);
+		//lbl_Heading.setText("Welcome  " + username);
+                this.setTitle("Welcome  " + username);
 		messageType = "broadcast";
 		btn_attach.setEnabled(false);
 		txf_sendTo.setEnabled(false);
@@ -80,7 +81,6 @@ public class GUI_Main extends javax.swing.JFrame {
         lbl_ChatArea = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btn_send = new javax.swing.JButton();
-        lbl_Heading = new javax.swing.JLabel();
         rb_broadcast = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txa_ChatArea = new javax.swing.JTextArea();
@@ -93,6 +93,7 @@ public class GUI_Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(16, 32, 39));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -112,12 +113,10 @@ public class GUI_Main extends javax.swing.JFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(16, 32, 39));
-        jPanel2.setBorder(null);
 
         jScrollPane3.setBorder(null);
 
         list_users.setBackground(new java.awt.Color(16, 32, 39));
-        list_users.setBorder(null);
         list_users.setForeground(new java.awt.Color(254, 254, 254));
         list_users.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -135,10 +134,15 @@ public class GUI_Main extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(lbl_ChatArea)
-                .addGap(43, 43, 43))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbl_ChatArea)
+                        .addGap(63, 63, 63))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,7 +154,6 @@ public class GUI_Main extends javax.swing.JFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(55, 71, 79));
-        jPanel3.setBorder(null);
 
         btn_send.setText("Send");
         btn_send.addActionListener(new java.awt.event.ActionListener() {
@@ -158,10 +161,6 @@ public class GUI_Main extends javax.swing.JFrame {
                 btn_sendActionPerformed(evt);
             }
         });
-
-        lbl_Heading.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        lbl_Heading.setForeground(new java.awt.Color(244, 244, 244));
-        lbl_Heading.setText("ChatApp");
 
         grp_messageType.add(rb_broadcast);
         rb_broadcast.setForeground(new java.awt.Color(224, 224, 224));
@@ -174,9 +173,13 @@ public class GUI_Main extends javax.swing.JFrame {
         });
 
         txa_ChatArea.setEditable(false);
-        txa_ChatArea.setBackground(new java.awt.Color(224, 224, 224));
+        txa_ChatArea.setBackground(new java.awt.Color(70, 88, 97));
         txa_ChatArea.setColumns(20);
+        txa_ChatArea.setForeground(new java.awt.Color(255, 255, 255));
         txa_ChatArea.setRows(5);
+        txa_ChatArea.setBorder(null);
+        txa_ChatArea.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        txa_ChatArea.setFocusable(false);
         jScrollPane1.setViewportView(txa_ChatArea);
 
         btn_attach.setText("Attach File");
@@ -223,39 +226,35 @@ public class GUI_Main extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_Heading)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(rb_broadcast)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rb_private)
-                        .addGap(18, 18, 18)
-                        .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(rb_file)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_attach, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 6, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 6, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_send, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6))))
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rb_broadcast)
+                .addGap(12, 12, 12)
+                .addComponent(rb_private)
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_send, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
+                .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(rb_file)
+                .addGap(6, 6, 6)
+                .addComponent(btn_attach, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_Heading)
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_attach, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -263,7 +262,7 @@ public class GUI_Main extends javax.swing.JFrame {
                         .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(rb_broadcast)
                         .addComponent(rb_file)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_send, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -279,7 +278,8 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -440,7 +440,6 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbl_ChatArea;
-    private javax.swing.JLabel lbl_Heading;
     private javax.swing.JList<String> list_users;
     private javax.swing.JRadioButton rb_broadcast;
     private javax.swing.JRadioButton rb_file;

@@ -116,6 +116,13 @@ public class ChatAppServer implements Runnable
 				activeClients.get(i).recieveMessage(m);
 			}
 		}
+	}//end broadcast
+	
+	public synchronized void handleError(int sentFromID)
+	{
+		String data = "There was an error sending your message";
+		Message m = new Message(data, activeClients.get(sentFromID).getUser());
+		activeClients.get(sentFromID).recieveMessage(m);
 	}
 
 	public static void main(String[] args) throws IOException
