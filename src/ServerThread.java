@@ -48,9 +48,15 @@ public class ServerThread extends Thread
 		}
 		
 	}
+	
+	//getters
+	public User getUser()
+	{
+		return activeUser;
+	}
 
 	//server thread recieves a message and sends it to an output stream
-	public void recieveMessage(Message m)
+	public synchronized void recieveMessage(Message m)
 	{
 		try
 		{
@@ -66,11 +72,12 @@ public class ServerThread extends Thread
 		System.out.println("ServerThread running " + id);
 		while(running)//shouldnt be while true, should be a volatile boolean
 		{
-			try
-			{
+		    try
+		    {
 				Message m;
 				m = (Message)input.readObject();//read incoming message and cast into Message
-
+				
+				//Below represents our implementation of our protocol on the server side.
 				//check tag of message. if it is "end" then close the socket
 				if(m.getTag().equals("end"))
 				{
@@ -79,7 +86,6 @@ public class ServerThread extends Thread
 					System.out.println(bye_text);
 					m.setData(bye_text);
 					server.broadcast(id, m);
-
 					//close IO
 					exit();
 				}
@@ -88,7 +94,7 @@ public class ServerThread extends Thread
 				else if(m.getTag().equals("userTransfer"))
 				{
 					activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
-					System.out.println("USER WORKED");
+					server.updateUserList();
 				}
 
 				//contains details of private message
@@ -98,23 +104,30 @@ public class ServerThread extends Thread
 					System.out.println(m.toString());//print message to server console
 					server.privateMessage(id, m);
 				}
-				//else this message will be a broadcast
-				else
+				
+				//TODO - change to else if for broadcast and file. last else must catch corrupted message.
+				else if(m.getTag().equals("broadcast") || m.getTag().equals("image"))
 				{
-					System.out.println(id + " recieved message:");//debug
+					System.out.println(id + " recieved broadcast message:");//debug
 					System.out.println(m.toString());//print message to server console
 					server.broadcast(id, m);
 				}
-			} catch (IOException e) {
-				System.out.println("Error in ServerThread run(), IO");
-				System.out.println(e);
-				exit();
-			} catch (ClassNotFoundException ee)
-			{
-				System.out.println("Error in ServerThread run(), Class error");
-				System.out.println(ee);
-				exit();
-			}//end catch
+				//else this message is somehow corrupt, send error
+				else
+				{
+					System.out.println(id + " SERIOUS ERROR. Message tag corrupted");//debug
+					server.handleError(id);
+				}//end else
+		    } catch (IOException e) {
+			    System.out.println("Error in ServerThread run(), IO");
+			    System.out.println(e);
+			    exit();
+		    } catch (ClassNotFoundException ee)
+		    {
+			    System.out.println("Error in ServerThread run(), Class error");
+			    System.out.println(ee);
+			    exit();
+		    }//end catch
 		}//end while
 		
 	}//end run
@@ -123,9 +136,11 @@ public class ServerThread extends Thread
 	{
 		try
 		{
+			
 			output.close(); //close output stream
 			client.close(); //close socket
 			server.removeClient(this); //remove this thread from the arraylist
+			server.updateUserList();
 			running=false; //exit loop
 		}
 		catch(IOException ioe)

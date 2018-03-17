@@ -34,8 +34,8 @@ public class ChatAppServer implements Runnable
 	//when thread is running, do this
 	public void run()
 	{
-		while(serverThread != null)
-		{
+	    while(serverThread != null)
+	    {
 			try
 			{
 				System.out.println("Connecting to user");
@@ -46,38 +46,63 @@ public class ChatAppServer implements Runnable
 				System.out.println("Error in run() method");
 				System.out.println(e.getMessage());
 			}
-		}
+	    }
 	}//end run
 
 	//when new client accepted, add them to list and start ServerThread for that client
-	public void addClient(Socket client)
+	public synchronized void addClient(Socket client)
 	{
-		System.out.println("User connected");
-		activeClients.add(new ServerThread(this, client));
-		activeClients.get(activeClients.size()-1).start();//start thread
+	    System.out.println("User connected");
+	    activeClients.add(new ServerThread(this, client));
+	    activeClients.get(activeClients.size()-1).start();//start thread
 	}//end addClient
+	
+	public synchronized void updateUserList()
+	{
+	    ArrayList<User> userList = new ArrayList<>();
+	    for(int i=0; i<activeClients.size();i++)
+	    {
+			//System.out.println("User is: " + activeClients.get(i).getUser());
+			userList.add(activeClients.get(i).getUser());
+	    }
+	    //System.out.println("DEBUG!!: " + userList.size());
+	    sendUserList(userList);
+	}
 
 	public void removeClient(ServerThread client)
 	{	
-		activeClients.remove(client);
+	    activeClients.remove(client);
+	}
+	
+	public synchronized void sendUserList(ArrayList<User> userList)
+	{
+		Message m = new Message(userList);
+		//System.out.println(m.getUserList().size()+ "DEBUG---------");
+		for (int i = 0; i < activeClients.size(); i++)
+		{
+			activeClients.get(i).recieveMessage(m);
+		}
 	}
 
 	//if server receives a message tagged as 'private', send to relevant user.
 	public synchronized void privateMessage(int sentFromID, Message m)
 	{
-		System.out.println("Private Message accepted");
-		int size = activeClients.size();
-		for (int i=0; i<size;i++ )
-		{
-			String clientName = activeClients.get(i).activeUser.getUsername();
-			System.out.println("Sending to user: " + clientName);
-			//System.out.println("DEBUIG CHECK NAME22: " + m.getUserTo());
-			if(clientName.equals(m.getUserTo()))
+	    System.out.println("Private Message accepted");
+	    int size = activeClients.size();
+	    for (int i=0; i<size;i++ )
+	    {
+			if(activeClients.get(i).id != sentFromID)
 			{
-				activeClients.get(i).recieveMessage(m);
-				break;//message only meant for one user, so stop
-			}
-		}
+				String clientName = activeClients.get(i).activeUser.getUsername();
+				System.out.println("Sending to user: " + clientName);
+				//System.out.println("DEBUIG CHECK NAME22: " + m.getUserTo());
+				if(clientName.equals(m.getUserTo()))
+				{
+					activeClients.get(i).recieveMessage(m);
+					break;//message only meant for one user, so stop
+				}//end if
+			}//end if		
+	    }//end for
 	}
 
 	//send given message to all active clients
@@ -91,12 +116,19 @@ public class ChatAppServer implements Runnable
 				activeClients.get(i).recieveMessage(m);
 			}
 		}
+	}//end broadcast
+	
+	public synchronized void handleError(int sentFromID)
+	{
+		String data = "There was an error sending your message";
+		Message m = new Message(data, activeClients.get(sentFromID).getUser());
+		activeClients.get(sentFromID).recieveMessage(m);
 	}
 
 	public static void main(String[] args) throws IOException
 	{
 		ChatAppServer main_server = null;
-		System.out.println("Starting Server");
+		System.out.println("Starting Server on " + ":"+args[0]  );
 		try
 		{
 			main_server = new ChatAppServer(Integer.parseInt(args[0]));

@@ -1,3 +1,18 @@
+
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicListUI;
+import javax.swing.plaf.basic.BasicListUI.ListSelectionHandler;
+import javax.swing.JFileChooser;
+import java.io.File;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,29 +26,41 @@
 public class GUI_Main extends javax.swing.JFrame {
     
     //attributes
+    String fileurl="";
     String server;
     String username;
-    String password;
     int port;
-
+	String messageType;
+	User activeUser;
+	ChatAppClient client;
+	ArrayList<User> all_users;
     /**
      * Creates new form ChatAppGUI
      */
-    public GUI_Main(String username, String password, String _server, int _port) {
+    public GUI_Main(String username, String _server, int _port) {
         this.username = username;
-        this.password = password;
         this.server = _server;
         this.port = _port;
-        initComponents();
-    }
-    
-    public GUI_Main(String username, String password)
-    {
-        this.username = username;
-        this.password = password;
-        this.server = "mikhail-VirtualBox";//this is where we would call the getHostName function
-        this.port = 6000;
-        initComponents();
+		messageType = "broadcast";
+		activeUser = new User(username, server);
+		all_users = new ArrayList<>();
+		client = new ChatAppClient(server, port, username, this);
+		initComponents();
+		//lbl_Heading.setText("Welcome  " + username);
+                this.setTitle("Welcome  " + username);
+		messageType = "broadcast";
+		btn_attach.setEnabled(false);
+		txf_sendTo.setEnabled(false);
+		list_users.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent lse) {
+				if(!lse.getValueIsAdjusting())
+				{
+					txf_sendTo.setText(list_users.getSelectedValue().toString());
+				}//end if
+			}//end method
+		});
+		SwingUtilities.getRootPane(this).setDefaultButton(btn_send);
     }
     
 
@@ -48,100 +75,197 @@ public class GUI_Main extends javax.swing.JFrame {
 
         grp_messageType = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        list_users = new javax.swing.JList<>();
+        lbl_ChatArea = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        btn_send = new javax.swing.JButton();
+        rb_broadcast = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txa_ChatArea = new javax.swing.JTextArea();
-        lbl_ChatArea = new javax.swing.JLabel();
-        lbl_Heading = new javax.swing.JLabel();
+        btn_attach = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         txa_newMessage = new javax.swing.JTextArea();
-        lbl_typeHere = new javax.swing.JLabel();
-        rb_broadcast = new javax.swing.JRadioButton();
         rb_private = new javax.swing.JRadioButton();
+        txf_sendTo = new javax.swing.JTextField();
         rb_file = new javax.swing.JRadioButton();
-        btn_attach = new javax.swing.JButton();
-        btn_send = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(16, 32, 39));
         setResizable(false);
-
-        txa_ChatArea.setEditable(false);
-        txa_ChatArea.setColumns(20);
-        txa_ChatArea.setRows(5);
-        jScrollPane1.setViewportView(txa_ChatArea);
-
-        lbl_ChatArea.setText("Chat Area");
-
-        lbl_Heading.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
-        lbl_Heading.setText("ChatApp");
-
-        txa_newMessage.setColumns(20);
-        txa_newMessage.setRows(5);
-        jScrollPane2.setViewportView(txa_newMessage);
-
-        lbl_typeHere.setText("Type Message Here:");
-
-        grp_messageType.add(rb_broadcast);
-        rb_broadcast.setText("broadcast");
-
-        grp_messageType.add(rb_private);
-        rb_private.setText("private");
-
-        grp_messageType.add(rb_file);
-        rb_file.setText("file");
-
-        btn_attach.setText("Attach File");
-
-        btn_send.setText("Send");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_Heading)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_typeHere)
-                    .addComponent(rb_broadcast)
-                    .addComponent(rb_private)
-                    .addComponent(rb_file)
-                    .addComponent(btn_attach)
-                    .addComponent(btn_send))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_ChatArea)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_ChatArea)
-                            .addComponent(lbl_typeHere))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lbl_Heading)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(rb_broadcast)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel2.setBackground(new java.awt.Color(16, 32, 39));
+
+        jScrollPane3.setBorder(null);
+
+        list_users.setBackground(new java.awt.Color(16, 32, 39));
+        list_users.setForeground(new java.awt.Color(254, 254, 254));
+        list_users.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        list_users.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(list_users);
+
+        lbl_ChatArea.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lbl_ChatArea.setForeground(new java.awt.Color(254, 254, 254));
+        lbl_ChatArea.setText("Users online");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbl_ChatArea)
+                        .addGap(63, 63, 63))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_ChatArea)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(55, 71, 79));
+
+        btn_send.setText("Send");
+        btn_send.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_sendActionPerformed(evt);
+            }
+        });
+
+        grp_messageType.add(rb_broadcast);
+        rb_broadcast.setForeground(new java.awt.Color(224, 224, 224));
+        rb_broadcast.setSelected(true);
+        rb_broadcast.setText("broadcast");
+        rb_broadcast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rb_broadcastActionPerformed(evt);
+            }
+        });
+
+        txa_ChatArea.setEditable(false);
+        txa_ChatArea.setBackground(new java.awt.Color(70, 88, 97));
+        txa_ChatArea.setColumns(20);
+        txa_ChatArea.setForeground(new java.awt.Color(255, 255, 255));
+        txa_ChatArea.setRows(5);
+        txa_ChatArea.setBorder(null);
+        txa_ChatArea.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        txa_ChatArea.setFocusable(false);
+        jScrollPane1.setViewportView(txa_ChatArea);
+
+        btn_attach.setText("Attach File");
+        btn_attach.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_attachActionPerformed(evt);
+            }
+        });
+
+        txa_newMessage.setBackground(new java.awt.Color(224, 224, 224));
+        txa_newMessage.setColumns(20);
+        txa_newMessage.setRows(1);
+        jScrollPane2.setViewportView(txa_newMessage);
+
+        grp_messageType.add(rb_private);
+        rb_private.setForeground(new java.awt.Color(224, 224, 224));
+        rb_private.setText("private");
+        rb_private.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rb_privateActionPerformed(evt);
+            }
+        });
+
+        txf_sendTo.setEditable(false);
+        txf_sendTo.setBackground(new java.awt.Color(224, 224, 224));
+        txf_sendTo.setEnabled(false);
+        txf_sendTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txf_sendToActionPerformed(evt);
+            }
+        });
+
+        grp_messageType.add(rb_file);
+        rb_file.setForeground(new java.awt.Color(224, 224, 224));
+        rb_file.setText("file");
+        rb_file.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rb_fileActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 6, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_send, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6))))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rb_broadcast)
+                .addGap(12, 12, 12)
+                .addComponent(rb_private)
+                .addGap(6, 6, 6)
+                .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(rb_file)
+                .addGap(6, 6, 6)
+                .addComponent(btn_attach, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_attach, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(rb_private)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rb_file)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_attach)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_send))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txf_sendTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(rb_broadcast)
+                        .addComponent(rb_file)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_send, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -149,16 +273,132 @@ public class GUI_Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        client.shutdown();
+    }//GEN-LAST:event_formWindowClosing
+ 
+
+    private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
+
+        boolean empty = txa_newMessage.getText().equals("");
+		if((!messageType.equals("file") && empty))//error prevention
+		{
+			JOptionPane.showMessageDialog(this, "No message was entered");
+		}
+		else if(messageType.equals("broadcast"))
+		{
+			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("You[broadcast]: " + userInput + "\n");
+			send("broadcast", userInput, "all");
+		}
+		else if(messageType.equals("private"))
+		{
+			String sendTo = txf_sendTo.getText();
+			String userInput = txa_newMessage.getText();
+			txa_ChatArea.append("You[private to " + sendTo + "]: " + userInput + "\n");
+			send("private", userInput, sendTo);
+		}
+		else//send file
+		{
+            //String filepath = JOptionPane.showInputDialog(this, "Enter filepath for file");
+            if(fileurl!="") {
+                //send("broadcast", fileurl, "all");
+                try {
+                    client.send(fileurl, txf_sendTo.getText());
+                }
+               catch(Exception e) {
+                   
+               }
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "No file was selected");
+            }
+                            //TODO:call file attach methods
+		}
+		txa_newMessage.setText(""); 
+    }//GEN-LAST:event_btn_sendActionPerformed
+
+    private void rb_fileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_fileActionPerformed
+        // TODO add your handling code here:
+        messageType = "file";
+        btn_attach.setEnabled(true);
+        txf_sendTo.setEnabled(false);
+    }//GEN-LAST:event_rb_fileActionPerformed
+
+    private void rb_privateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_privateActionPerformed
+        // TODO add your handling code here:
+        messageType = "private";
+        btn_attach.setEnabled(false);
+        txf_sendTo.setEnabled(true);
+    }//GEN-LAST:event_rb_privateActionPerformed
+
+    private void rb_broadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_broadcastActionPerformed
+        // TODO add your handling code here:
+        messageType = "broadcast";
+        btn_attach.setEnabled(false);
+        txf_sendTo.setEnabled(false);
+    }//GEN-LAST:event_rb_broadcastActionPerformed
+
+    private void txf_sendToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_sendToActionPerformed
+        // TODO add your handling code here:
+		
+    }//GEN-LAST:event_txf_sendToActionPerformed
+
+    private void btn_attachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_attachActionPerformed
+        final JFileChooser fc;
+        fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(GUI_Main.this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            fileurl = file.getAbsolutePath();
+        }
+    }//GEN-LAST:event_btn_attachActionPerformed
+
+	//given a message, print to textArea
+	public void recieve(String message)
+	{
+		txa_ChatArea.append(message);
+	}
+	
+	public void recieve(Message m)
+	{
+		if(m.getTag().equals("userList"))
+		{
+		    all_users = new ArrayList<>(m.getUserList());
+		    System.out.println("DEBUG------- " + all_users.size());
+		    String[] temp = new String[all_users.size()];
+		    for(int i=0; i<all_users.size();i++)
+		    {
+			temp[i] = all_users.get(i).getUsername();
+		    }
+		    list_users.setListData(temp);
+		}
+	}
+	
+	//given an input message, send to client class
+	public void send(String type, String message, String sendTo)
+	{
+		client.send(type, message, sendTo);
+	}
 /*
     public static void main(String args[]) {
         
@@ -194,15 +434,18 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JButton btn_send;
     private javax.swing.ButtonGroup grp_messageType;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbl_ChatArea;
-    private javax.swing.JLabel lbl_Heading;
-    private javax.swing.JLabel lbl_typeHere;
+    private javax.swing.JList<String> list_users;
     private javax.swing.JRadioButton rb_broadcast;
     private javax.swing.JRadioButton rb_file;
     private javax.swing.JRadioButton rb_private;
     private javax.swing.JTextArea txa_ChatArea;
     private javax.swing.JTextArea txa_newMessage;
+    private javax.swing.JTextField txf_sendTo;
     // End of variables declaration//GEN-END:variables
 }
