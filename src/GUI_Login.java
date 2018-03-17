@@ -214,11 +214,12 @@ public class GUI_Login extends javax.swing.JFrame {
             }//end if login
             else//entered correct password, log them in
             {
+                this.setVisible(false);
                 GUI_Main main;
                 main = new GUI_Main(username, server, port);
                 main.setVisible(true);
                 main.setBounds(this.getBounds());
-                this.dispose();
+                //this.dispose();
             }
         }//end if
         else//user must first register
@@ -227,12 +228,13 @@ public class GUI_Login extends javax.swing.JFrame {
             String pass2 = new String(pf_confirm.getPassword());
             if(pass.equals(pass2))//password match, attempt to register
             {
+                this.setVisible(false);
                 register(username, pass);
                 GUI_Main main;
                 main = new GUI_Main(username, server, port);
                 main.setVisible(true);
                 main.setBounds(this.getBounds());
-                this.dispose();
+                //this.dispose();
             }
             else//password dont match
             {
