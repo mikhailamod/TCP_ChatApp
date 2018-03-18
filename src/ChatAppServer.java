@@ -69,7 +69,7 @@ public class ChatAppServer implements Runnable
 	    sendUserList(userList);
 	}
 
-	public void removeClient(ServerThread client)
+	public synchronized void removeClient(ServerThread client)
 	{	
 	    activeClients.remove(client);
 	}
