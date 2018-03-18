@@ -21,18 +21,18 @@ import javax.swing.JOptionPane;
 
 public class ChatAppClient implements Runnable {
 
-    private int portNumber;
-    private User activeUser;
+    private int portNumber;//the port number this client will connect to
+    private User activeUser;//the User object associated with this class
 
     private ObjectOutputStream outputObject;
     private ObjectInputStream GUI_Input;
-    private BufferedReader consoleIn;
+    private BufferedReader consoleIn;//console input for when no gui is used
 
-    private ClientThread clientThread;
-    private Thread thread = null;
+    private ClientThread clientThread;//ThreadClass that this client uses to accept messages
+    private Thread thread = null;//Runnable thread that this class uses to send messages
     private Socket socket;
     private Message m = null;
-    private boolean hasSent;
+    private boolean hasSentUser;//boolean indicating whether client has sent information about user to the server.
     private GUI_Main gui;
 
     //Global Variables
@@ -42,7 +42,7 @@ public class ChatAppClient implements Runnable {
 
         this.portNumber = portNumber;
         activeUser = new User(user_name, hostname);
-        hasSent = false;
+        hasSentUser = false;
 
         this.gui = gui;
 
@@ -69,81 +69,28 @@ public class ChatAppClient implements Runnable {
             thread.start();
         }
     }
-
+	
+	//Send user information to server
+	//this allows Server to keep track of active users.
     public void sendUserObject(User user) {
-        if (!hasSent) {
+        if (!hasSentUser) {
             try {
                 Message m = new Message("", user);
                 m.setTag("userTransfer");
                 outputObject.writeObject(m);
-                System.out.println("DEBUG: Sent unser");
-                hasSent = true;
+                hasSentUser = true;
             } catch (IOException ioe) {
                 System.out.println("Error in ChatAppClient sendUserObject");
+				gui.displayError(ioe, "Error sending User object");
             }
         }
 
     }
 
     //do the follwoing while ChatAppClient is running
-    public void run() {
+    public void run()
+	{
         sendUserObject(activeUser);
-        //System.out.println("ChatAppClient thread running\nType a message to broadcast it\n");
-        while (thread != null) {
-            System.out.println("Commands:\n'@broadcast': send a message to everyone,\n'@file': send a file");
-            try {
-                String userInput = consoleIn.readLine();//this is the message that will eventually be sent to another user.
-                if (userInput.equalsIgnoreCase("@file")) {
-                    System.out.println("Please Enter the file Path: ");
-                    //retrieves confirmation gets file name and directory from the input
-                    String in = consoleIn.readLine();
-                    String extension = in.substring(in.lastIndexOf("."));
-                    Path path = Paths.get(in);
-                    //retrieves which format the file extension fallls under (Image/video) 
-                    String mime = getMIME(extension);
-
-                    //checks file exists
-                    if (new File(in).exists() && !new File(in).isDirectory()) {
-
-                        //reads in file as a byte array
-                        byte[] fileContent = Files.readAllBytes(path);
-
-                        //creates message with correct format
-                        if (mime.equalsIgnoreCase("image")) {
-                            m = new Message(fileContent, activeUser, "image", in);
-                        } else if (mime.equalsIgnoreCase("video")) {
-                            m = new Message(fileContent, activeUser, "video", in);
-                        }
-                    } else {
-                        System.out.println("File Path Does Not Exist!");
-                    }
-
-                } else if (userInput.equalsIgnoreCase("@broadcast")) {
-                    System.out.println("Please Enter a message:");
-                    userInput = consoleIn.readLine();
-                    m = new Message(userInput, activeUser);
-                } else if (userInput.substring(0, 5).equals("@user")) {
-                    String send_to = userInput.substring(6);
-                    System.out.println(send_to + " DEBUGF");
-                    System.out.println("Please Enter a message:");
-                    userInput = consoleIn.readLine();
-                    m = new Message(userInput, activeUser);
-                    m.setTag("private");
-                    m.setUserTo(send_to);//format of input is @user:name
-                }
-
-                if (m != null) {
-                    outputObject.writeObject(m);
-                    System.out.println("<Your message has been sent>\n");
-                }
-
-            }//end try
-            catch (IOException ie) {
-                System.out.println("Error in ChatAppClient run() IO");
-                System.exit(1);//replace with proper way to deal with errors
-            }
-
-        }
     }//end run
 
     //given a message type, data and intended receipient, write to OutputStream
@@ -364,6 +311,7 @@ public class ChatAppClient implements Runnable {
             Message m = new Message("", activeUser);
             m.setTag("end");
             outputObject.writeObject(m);
+			clientThread.exit();
         } catch (IOException e) {
             System.out.println(e);
         }
