@@ -132,7 +132,7 @@ public class ServerThread extends Thread
 		
 	}//end run
 
-	public void exit()
+	public synchronized void exit()
 	{
 		try
 		{

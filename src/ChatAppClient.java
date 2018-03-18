@@ -283,6 +283,7 @@ public class ChatAppClient implements Runnable {
 		else if (m.getTag().equals("end"))
 		{
             System.out.println(m.toString());
+			gui.recieve(m.getData());
         }
 
     }
