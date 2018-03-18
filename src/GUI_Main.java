@@ -384,7 +384,7 @@ public class GUI_Main extends javax.swing.JFrame {
 	}
 	
 	//overloaded method to receive a list of users 
-	public void receive(Message m)
+	public synchronized void receive(Message m)
 	{
 		if(m.getTag().equals("userList"))
 		{

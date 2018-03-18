@@ -82,7 +82,7 @@ public class ServerThread extends Thread
 				if(m.getTag().equals("end"))
 				{
 					//inform all clients that this client is leaving
-					String bye_text = m.getUser().getUsername() + " has left.";
+					String bye_text = m.getUser().getUsername() + " has left.\n";
 					System.out.println(bye_text);
 					m.setData(bye_text);
 					server.broadcast(id, m);

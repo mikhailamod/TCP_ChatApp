@@ -86,7 +86,7 @@ public class ChatAppClient {
     }//end sendUserObject
 	
     //given a message type, data and intended receipient, write to OutputStream
-    public void send(String type, String message, String sendTo)
+    public synchronized void send(String type, String message, String sendTo)
 	{
         Message m = new Message(message, activeUser);
         m.setTag(type);
@@ -99,7 +99,7 @@ public class ChatAppClient {
     }
 
     //Overloaded send function for files
-    public void send(String incoming_file, String sendTo) throws IOException
+    public synchronized void send(String incoming_file, String sendTo) throws IOException
 	{
 
         Message m = null;
@@ -145,7 +145,7 @@ public class ChatAppClient {
     }
 
     //Given a Message obj, send to GUI with relevant output
-    public void receive(Message m) {
+    public synchronized void receive(Message m) {
         //for broadcasts
         if (m.getTag().equals("broadcast"))
 		{
@@ -297,7 +297,7 @@ public class ChatAppClient {
     }//end getHostName
 
     //runs when program shutdowns. send a message to the server with the tag "end"
-    public void shutdown() {
+    public synchronized void shutdown() {
         System.err.println("shutdown");
         try {
             Message m = new Message("", activeUser);
