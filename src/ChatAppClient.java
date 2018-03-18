@@ -29,7 +29,6 @@ public class ChatAppClient {
     private BufferedReader consoleIn;//console input for when no gui is used
 
     private ClientThread clientThread;//ThreadClass that this client uses to accept messages
-    private Thread thread = null;//Runnable thread that this class uses to send messages
     private Socket socket;
     private Message m = null;
     private boolean hasSentUser;//boolean indicating whether client has sent information about user to the server.
@@ -37,7 +36,8 @@ public class ChatAppClient {
 
     //Global Variables
     //Scanner kb;
-    public ChatAppClient(String hostname, int portNumber, String user_name, GUI_Main gui) {
+    public ChatAppClient(String hostname, int portNumber, String user_name, GUI_Main gui)
+	{
         System.out.println("Starting ChatAppClient()");
 
         this.portNumber = portNumber;
@@ -59,7 +59,8 @@ public class ChatAppClient {
     }//end con
 
     //initialize IO for user. Start threads.
-    public synchronized void start() throws IOException {
+    public synchronized void start() throws IOException
+	{
         outputObject = new ObjectOutputStream(socket.getOutputStream());//send a Message obj to server
         consoleIn = new BufferedReader(new InputStreamReader(System.in));//to read from console
 		clientThread = new ClientThread(socket, this);
@@ -68,7 +69,8 @@ public class ChatAppClient {
 	
 	//Send user information to server
 	//this allows Server to keep track of active users.
-    public synchronized void sendUserObject(User user) {
+    public synchronized void sendUserObject(User user)
+	{
         if (!hasSentUser) {
             try {
                 Message m = new Message("", user);
@@ -81,10 +83,11 @@ public class ChatAppClient {
             }
         }
 
-    }
+    }//end sendUserObject
 	
     //given a message type, data and intended receipient, write to OutputStream
-    public void send(String type, String message, String sendTo) {
+    public void send(String type, String message, String sendTo)
+	{
         Message m = new Message(message, activeUser);
         m.setTag(type);
         m.setUserTo(sendTo);
@@ -96,26 +99,27 @@ public class ChatAppClient {
     }
 
     //Overloaded send function for files
-    public void send(String in, String sendTo) throws IOException {
+    public void send(String incoming_file, String sendTo) throws IOException
+	{
 
         Message m = null;
 
-        String extension = in.substring(in.lastIndexOf("."));
-        Path path = Paths.get(in);
+        String extension = incoming_file.substring(incoming_file.lastIndexOf("."));
+        Path path = Paths.get(incoming_file);
         //retrieves which format the file extension fallls under (Image/video) 
         String mime = getMIME(extension);
 
         //checks file exists
-        if (new File(in).exists() && !new File(in).isDirectory()) {
+        if (new File(incoming_file).exists() && !new File(incoming_file).isDirectory()) {
 
             //reads in file as a byte array
             byte[] fileContent = Files.readAllBytes(path);
 
             //creates message with correct format
             if (mime.equalsIgnoreCase("image")) {
-                m = new Message(fileContent, activeUser, "image", in);
+                m = new Message(fileContent, activeUser, "image", incoming_file);
             } else if (mime.equalsIgnoreCase("video")) {
-                m = new Message(fileContent, activeUser, "video", in);
+                m = new Message(fileContent, activeUser, "video", incoming_file);
             }
         }
 
@@ -128,7 +132,8 @@ public class ChatAppClient {
     }
 
     //get file category based on extension
-    public static String getMIME(String ext) throws IOException {
+    public static String getMIME(String ext) throws IOException
+	{
         if (ext.contains("png") || ext.contains("jpg") || ext.contains("jpeg")) {
             return "image";
         } else if (ext.contains("mp4") || ext.contains("mkv") || ext.contains("avi")) {
@@ -140,19 +145,17 @@ public class ChatAppClient {
     }
 
     //Given a Message obj, send to GUI with relevant output
-    public void recieve(Message m) {
+    public void receive(Message m) {
         //for broadcasts
         if (m.getTag().equals("broadcast"))
 		{
-            gui.recieve("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
-            //System.out.println("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
-        } //for user to user message
-        else if (m.getTag().equals("private"))
+            gui.receive("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+        } 
+        else if (m.getTag().equals("private"))//for user to user message
 		{
-            gui.recieve("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
-            //System.out.println("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
-        } //for image broadcast
-        else if (m.getTag().equals("image"))
+            gui.receive("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
+        } 
+        else if (m.getTag().equals("image"))//for image broadcast
 		{
 			String dialogMessage = m.getUser().getUsername() + " wants to send you an image. Do you accept?";
             int decision = JOptionPane.showConfirmDialog(null, dialogMessage, "File transfer request", JOptionPane.YES_NO_OPTION);
@@ -205,25 +208,25 @@ public class ChatAppClient {
                 String ext = fname.substring(m.getFilepath().lastIndexOf("."));
                 
 				System.out.println("Receiving Video File...");
-				gui.recieve("Receiving Video File...");
+				gui.receive("Receiving Video File...");
                 m.outputFile(saveDest, fname, ext);
                 System.out.println("File Successfully Downloaded!");
-				gui.recieve("File Successfully Downloaded to " + saveDest);
+				gui.receive("File Successfully Downloaded to " + saveDest);
             }
         }//end else if
         else if (m.getTag().equals("userList"))
 		{
             System.out.println("Recieving user list - " + m.getUserList().get(0));
-            gui.recieve(m);
+            gui.receive(m);
         }
 
 		else if (m.getTag().equals("end"))
 		{
             System.out.println(m.toString());
-			gui.recieve(m.getData());
+			gui.receive(m.getData());
         }
 
-    }
+    }//end recieve
 
     //get a password input from user - uses Unix console password format (i.e doesnt show)
     //if check, then change text
@@ -264,7 +267,6 @@ public class ChatAppClient {
         }//end while
 
         //hash password and write to file
-        //TO DO: hash password with SHA-256, parse into byte to hex, write hex to file
         String hashed = AuthManager.hashPassword(password);
         AuthManager.writeToFile(username, hashed);
 

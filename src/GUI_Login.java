@@ -33,7 +33,7 @@ public class GUI_Login extends javax.swing.JFrame {
         ImageIcon i = new ImageIcon("back.jpg");
         jLabel3.setIcon(i);
         registerLook(mustRegister);
-	SwingUtilities.getRootPane(this).setDefaultButton(btn_login);
+		SwingUtilities.getRootPane(this).setDefaultButton(btn_login);
         welcome=wel;
     }
     

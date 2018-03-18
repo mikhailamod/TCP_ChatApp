@@ -31,10 +31,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         jPanel3.setVisible(false);
         isSimple = true;
 		SwingUtilities.getRootPane(this).setDefaultButton(btn_continue);
-		txf_username.requestFocus();
-        
-                
-                
+		txf_username.requestFocus();           
     }
 
     /**
@@ -354,31 +351,13 @@ public class GUI_Welcome extends javax.swing.JFrame{
 		    return e.toString();
 	    }
     }//end getHostName
+	
     public static void main(String args[]) {
-        /*try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }*/
         try { 
-    javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"); 
-} catch (Exception ex) { 
-    ex.printStackTrace(); 
-}
-        /*} catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI_Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
-        //</editor-fold>
-        //</editor-fold>
-        //get user info
+			javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"); 
+		} catch (Exception ex) { 
+			ex.printStackTrace(); 
+		}
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

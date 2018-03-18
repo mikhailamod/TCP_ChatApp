@@ -51,6 +51,9 @@ public class GUI_Main extends javax.swing.JFrame {
 		messageType = "broadcast";
 		btn_attach.setEnabled(false);
 		txf_sendTo.setEnabled(false);
+		
+		//set selection listner for the JList
+		//when a selection is made, change value of user textfield.
 		list_users.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent lse) {
@@ -341,6 +344,7 @@ public class GUI_Main extends javax.swing.JFrame {
         messageType = "file";
         btn_attach.setEnabled(true);
         txf_sendTo.setEnabled(false);
+		txf_sendTo.setText("Choose a user from the list");
     }//GEN-LAST:event_rb_fileActionPerformed
 
     private void rb_privateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb_privateActionPerformed
@@ -374,12 +378,13 @@ public class GUI_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_attachActionPerformed
 
 	//given a message, print to textArea
-	public void recieve(String message)
+	public void receive(String message)
 	{
 		txa_ChatArea.append(message);
 	}
 	
-	public void recieve(Message m)
+	//overloaded method to receive a list of users 
+	public void receive(Message m)
 	{
 		if(m.getTag().equals("userList"))
 		{
@@ -392,6 +397,10 @@ public class GUI_Main extends javax.swing.JFrame {
 		    }
 		    list_users.setListData(temp);
 		}
+		else
+		{
+			txa_ChatArea.append("A message was received: " + m.getData() + "\n");
+		}
 	}
 	
 	//given an input message, send to client class
@@ -400,39 +409,12 @@ public class GUI_Main extends javax.swing.JFrame {
 		client.send(type, message, sendTo);
 	}
 	
+	//given an error, display the details to the user.
 	public void displayError(Exception e, String title)
 	{
 		JOptionPane.showMessageDialog(this, e.toString(), title, JOptionPane.ERROR_MESSAGE);
 	}
-/*
-    public static void main(String args[]) {
-        
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
 
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI_Main().setVisible(true);
-            }
-        });
-    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_attach;
