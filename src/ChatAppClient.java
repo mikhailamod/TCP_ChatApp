@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-public class ChatAppClient implements Runnable {
+public class ChatAppClient {
 
     private int portNumber;//the port number this client will connect to
     private User activeUser;//the User object associated with this class
@@ -59,20 +59,16 @@ public class ChatAppClient implements Runnable {
     }//end con
 
     //initialize IO for user. Start threads.
-    public void start() throws IOException {
+    public synchronized void start() throws IOException {
         outputObject = new ObjectOutputStream(socket.getOutputStream());//send a Message obj to server
         consoleIn = new BufferedReader(new InputStreamReader(System.in));//to read from console
-
-        if (thread == null) {
-            clientThread = new ClientThread(socket, this);
-            thread = new Thread(this);
-            thread.start();
-        }
+		clientThread = new ClientThread(socket, this);
+		sendUserObject(activeUser);
     }
 	
 	//Send user information to server
 	//this allows Server to keep track of active users.
-    public void sendUserObject(User user) {
+    public synchronized void sendUserObject(User user) {
         if (!hasSentUser) {
             try {
                 Message m = new Message("", user);
@@ -86,13 +82,7 @@ public class ChatAppClient implements Runnable {
         }
 
     }
-
-    //do the follwoing while ChatAppClient is running
-    public void run()
-	{
-        sendUserObject(activeUser);
-    }//end run
-
+	
     //given a message type, data and intended receipient, write to OutputStream
     public void send(String type, String message, String sendTo) {
         Message m = new Message(message, activeUser);
