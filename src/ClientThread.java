@@ -34,17 +34,17 @@ public class ClientThread extends Thread
 			try
 			{
 				Message m = (Message)input.readObject();//get message from input stream (this would be the output stream of ServerThread)
-				client.recieve(m);
+				client.receive(m);
 			}
 			catch(ClassNotFoundException ie)
 			{
 				System.out.println("Error in ClientThread run(). Class");
-            exit();
+				exit();
 			}
 			catch (IOException e)
 			{
-				System.out.println("Error in ClientThread run(). IO");
-           	exit();
+				System.out.println("---");
+				exit();
 			}//edn catch
 		}//end while
 	}//end run

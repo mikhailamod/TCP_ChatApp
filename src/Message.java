@@ -17,11 +17,13 @@ public class Message implements Serializable
 	//attributes
 	private String tag; // tag of message
 	private String data;//the actual message
-	private byte[] file;// or file
-	private String filepath; //File's path
 	private User userFrom; //user that send the message
 	private String userTo;//for private message, user that will recieve this message. Set to all for broadcast
-	private ArrayList<User> userList;
+	
+	private byte[] file;// or file
+	private String filepath; //File's path
+
+	private ArrayList<User> userList;//a list of active clients in ChatAppServer
 	
 	public Message(String data, User user)
 	{
@@ -33,15 +35,11 @@ public class Message implements Serializable
 
 	public Message(byte[] file, User user, String tag, String filepath)
 	{
-		setFile(file);
-		userFrom = user;
+		this.userFrom = user;
 		this.tag=tag;
+		this.data = "";
+		setFile(file);
 		this.filepath = filepath;
-	}
-
-	public Message(String data)
-	{
-		this.data = data;
 	}
 	
 	public Message(ArrayList<User> userList)

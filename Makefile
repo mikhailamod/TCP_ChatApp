@@ -29,10 +29,7 @@ CLASSFILES = bin/ChatAppServer.class
 #Below: Java files I want the javadocs from
 DOCCLASSES = src/ChatAppServer.java
 
-default: change classes
-
-change:
-	@cd src/
+default: classes
 
 classes: $(CLASSES:.java=.class)
 
@@ -41,3 +38,9 @@ doc: $(CLASSFILES)
 
 clean:
 	rm $(JCLASSDIR)*.class
+
+server:
+	cd bin; java ChatAppServer 6000
+
+client:
+	cd bin; java GUI_Welcome
