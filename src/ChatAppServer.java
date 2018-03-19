@@ -91,9 +91,9 @@ public class ChatAppServer implements Runnable
 	    int size = activeClients.size();
 	    for (int i=0; i<size;i++ )
 	    {
-			if(activeClients.get(i).id != sentFromID)
+			if(activeClients.get(i).getID() != sentFromID)
 			{
-				String clientName = activeClients.get(i).activeUser.getUsername();
+				String clientName = activeClients.get(i).getUser().getUsername();
 				System.out.println("Sending to user: " + clientName);
 				//System.out.println("DEBUIG CHECK NAME22: " + m.getUserTo());
 				if(clientName.equals(m.getUserTo()))
@@ -111,7 +111,7 @@ public class ChatAppServer implements Runnable
 		int size = activeClients.size();
 		for (int i=0; i<size;i++ )
 		{
-			if(activeClients.get(i).id != sentFromID)
+			if(activeClients.get(i).getID() != sentFromID)
 			{
 				activeClients.get(i).recieveMessage(m);
 			}

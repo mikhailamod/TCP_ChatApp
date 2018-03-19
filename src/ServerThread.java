@@ -22,14 +22,14 @@ import java.io.BufferedReader;
 public class ServerThread extends Thread
 {
 	//Attributes
-	ChatAppServer server;//ServerThread runs in ChatAppServer
+	private ChatAppServer server;//ServerThread runs in ChatAppServer
 	Socket client;
-	int id;
+	private int id;
 	volatile boolean running;
 	ObjectOutputStream output;
 	ObjectInputStream input;
 	//Scanner kb = null;
-	User activeUser;//the user associated with this Socket
+	private User activeUser;//the user associated with this Socket
 
 	public ServerThread(ChatAppServer server, Socket client)
 	{
@@ -50,10 +50,12 @@ public class ServerThread extends Thread
 	}
 	
 	//getters
-	public User getUser()
-	{
-		return activeUser;
-	}
+	public User getUser(){ return activeUser; }
+	public ChatAppServer getServer(){ return server;}
+	public int getID(){ return id; }
+	
+	//setters
+	public void setUser(User user){ activeUser = new User(user); }
 
 	//server thread recieves a message and sends it to an output stream
 	public synchronized void recieveMessage(Message m)
@@ -77,48 +79,8 @@ public class ServerThread extends Thread
 				Message m;
 				m = (Message)input.readObject();//read incoming message and cast into Message
 				
-				//Below represents our implementation of our protocol on the server side.
-				//check tag of message. if it is "end" then close the socket
-				if(m.getTag().equals("end"))
-				{
-					//inform all clients that this client is leaving
-					String bye_text = m.getUser().getUsername() + " has left.\n";
-					System.out.println(bye_text);
-					m.setData(bye_text);
-					server.broadcast(id, m);
-					//close IO
-					exit();
-				}
-
-				//this message will contain no data, only a User object which we will assign to activeUser
-				else if(m.getTag().equals("userTransfer"))
-				{
-					System.out.println("DEBUG USER - " + m.getUser().getUsername());
-					activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
-					server.updateUserList();
-				}
-
-				//contains details of private message
-				else if(m.getTag().equals("private"))
-				{
-					System.out.print(id + " recieved private message:");//debug
-					System.out.println(m.toString());//print message to server console
-					server.privateMessage(id, m);
-				}
-				
-				//TODO - change to else if for broadcast and file. last else must catch corrupted message.
-				else if(m.getTag().equals("broadcast") || m.getTag().equals("image") || m.getTag().equals("video"))
-				{
-					System.out.println(id + " recieved broadcast message:");//debug
-					System.out.println(m.toString());//print message to server console
-					server.broadcast(id, m);
-				}
-				//else this message is somehow corrupt, send error
-				else
-				{
-					System.out.println(id + " SERIOUS ERROR. Message tag corrupted");//debug
-					server.handleError(id);
-				}//end else
+				ChatAppProtocol protocol = new ChatAppProtocol(this, m);
+				protocol.parseMessage();
 		    } catch (IOException e) {
 			    System.out.println("Error in ServerThread run(), IO");
 			    System.out.println(e);

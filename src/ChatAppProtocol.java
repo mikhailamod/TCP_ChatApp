@@ -41,6 +41,58 @@ public class ChatAppProtocol
 		{
 			parseClient(message);
 		}
+		else
+		{
+			parseServer(message);
+		}
+	}
+	
+	private synchronized void parseServer(Message m)
+	{
+		ChatAppServer server = serverThread.getServer();
+		int id = serverThread.getID();
+		User activeUser = serverThread.getUser();
+		if(m.getTag().equals("end"))
+		{
+			//inform all clients that this client is leaving
+			String bye_text = m.getUser().getUsername() + " has left.\n";
+			System.out.println(bye_text);
+			m.setData(bye_text);
+			server.broadcast(id, m);
+			//close IO
+			serverThread.exit();
+		}
+
+		//this message will contain no data, only a User object which we will assign to activeUser
+		else if(m.getTag().equals("userTransfer"))
+		{
+			System.out.println("DEBUG USER - " + m.getUser().getUsername());
+			activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
+			serverThread.setUser(activeUser);
+			server.updateUserList();
+		}
+
+		//contains details of private message
+		else if(m.getTag().equals("private"))
+		{
+			System.out.print(id + " recieved private message:");//debug
+			System.out.println(m.toString());//print message to server console
+			server.privateMessage(id, m);
+		}
+
+		//TODO - change to else if for broadcast and file. last else must catch corrupted message.
+		else if(m.getTag().equals("broadcast") || m.getTag().equals("image") || m.getTag().equals("video"))
+		{
+			System.out.println(id + " recieved broadcast message:");//debug
+			System.out.println(m.toString());//print message to server console
+			server.broadcast(id, m);
+		}
+		//else this message is somehow corrupt, send error
+		else
+		{
+			System.out.println(id + " SERIOUS ERROR. Message tag corrupted");//debug
+			server.handleError(id);
+		}//end else
 	}
 	
 	//given a message, look at the tag to decide what to do.

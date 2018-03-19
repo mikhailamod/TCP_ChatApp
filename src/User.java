@@ -21,7 +21,20 @@ public class User implements Serializable
 		{
 			System.out.println("Error");
 		}
-		
+	}
+	
+	//copy constructor
+	public User(User u)
+	{
+		this.username = u.getUsername();
+		this.hostname = u.getHostName();
+		try{
+			ip = InetAddress.getByName(hostname);
+		}
+		catch (UnknownHostException e)
+		{
+			System.out.println("Error");
+		}
 	}
 
 	public String getIP()
