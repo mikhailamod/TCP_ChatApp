@@ -12,6 +12,7 @@ import javax.swing.plaf.basic.BasicListUI;
 import javax.swing.plaf.basic.BasicListUI.ListSelectionHandler;
 import javax.swing.JFileChooser;
 import java.io.File;
+import javax.swing.DefaultListModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -34,6 +35,7 @@ public class GUI_Main extends javax.swing.JFrame {
 	User activeUser;
 	ChatAppClient client;
 	ArrayList<User> all_users;
+	DefaultListModel<String> listModel;//used to update the JList
     /**
      * Creates new form ChatAppGUI
      */
@@ -45,9 +47,12 @@ public class GUI_Main extends javax.swing.JFrame {
 		activeUser = new User(username, server);
 		all_users = new ArrayList<>();
 		client = new ChatAppClient(server, port, username, this);
+		listModel = new DefaultListModel<>();
+		
 		initComponents();
-		//lbl_Heading.setText("Welcome  " + username);
+		list_users.setModel(listModel);
         this.setTitle("Welcome  " + username);
+		
 		messageType = "broadcast";
 		btn_attach.setEnabled(false);
 		txf_sendTo.setEnabled(false);
@@ -390,12 +395,12 @@ public class GUI_Main extends javax.swing.JFrame {
 		{
 		    all_users = new ArrayList<>(m.getUserList());
 		    System.out.println("DEBUG------- " + all_users.size());
-		    String[] temp = new String[all_users.size()];
+			listModel.clear();
 		    for(int i=0; i<all_users.size();i++)
 		    {
-			temp[i] = all_users.get(i).getUsername();
+				System.out.println(all_users.get(i).getUsername());
+				listModel.addElement(all_users.get(i).getUsername());
 		    }
-		    list_users.setListData(temp);
 		}
 		else
 		{

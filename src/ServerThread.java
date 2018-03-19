@@ -93,6 +93,7 @@ public class ServerThread extends Thread
 				//this message will contain no data, only a User object which we will assign to activeUser
 				else if(m.getTag().equals("userTransfer"))
 				{
+					System.out.println("DEBUG USER - " + m.getUser().getUsername());
 					activeUser = new User(m.getUser().getUsername(), m.getUser().getHostName());
 					server.updateUserList();
 				}
