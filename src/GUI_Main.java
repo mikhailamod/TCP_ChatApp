@@ -400,6 +400,7 @@ public class GUI_Main extends javax.swing.JFrame {
 		    {
 				System.out.println("User List ting: " + all_users.get(i));
 				listModel.addElement(all_users.get(i));
+				SwingUtilities.getRootPane(this).validate();
 		    }
 		}
 		else
