@@ -64,7 +64,10 @@ public class GUI_Main extends javax.swing.JFrame {
 			public void valueChanged(ListSelectionEvent lse) {
 				if(!lse.getValueIsAdjusting())
 				{
-					txf_sendTo.setText(list_users.getSelectedValue().toString());
+					if(list_users.getSelectedValue() != null)
+					{
+						txf_sendTo.setText(list_users.getSelectedValue());
+					}
 				}//end if
 			}//end method
 		});
