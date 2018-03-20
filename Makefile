@@ -15,6 +15,7 @@ JUNITCP = .bin/:junit.jar:hamcrest.jar
 CLASSES = 	src/User.java \
 			src/Message.java \
 			src/AuthManager.java \
+			src/ChatAppProtocol.java \
 			src/ChatAppServer.java \
 			src/ServerThread.java \
 			src/ClientThread.java \
