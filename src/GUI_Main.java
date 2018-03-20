@@ -34,7 +34,7 @@ public class GUI_Main extends javax.swing.JFrame {
 	String messageType;
 	User activeUser;
 	ChatAppClient client;
-	ArrayList<User> all_users;
+	ArrayList<String> all_users;
 	DefaultListModel<String> listModel;//used to update the JList
     /**
      * Creates new form ChatAppGUI
@@ -395,11 +395,11 @@ public class GUI_Main extends javax.swing.JFrame {
 		{
 		    all_users = new ArrayList<>(m.getUserList());
 		    System.out.println("DEBUG------- " + all_users.size());
-			listModel.clear();
+			listModel.removeAllElements();
 		    for(int i=0; i<all_users.size();i++)
 		    {
-				System.out.println(all_users.get(i).getUsername());
-				listModel.addElement(all_users.get(i).getUsername());
+				System.out.println("User List ting: " + all_users.get(i));
+				listModel.addElement(all_users.get(i));
 		    }
 		}
 		else

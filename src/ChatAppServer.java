@@ -59,11 +59,11 @@ public class ChatAppServer implements Runnable
 	
 	public synchronized void updateUserList()
 	{
-	    ArrayList<User> userList = new ArrayList<>();
+	    ArrayList<String> userList = new ArrayList<>();
 	    for(int i=0; i<activeClients.size();i++)
 	    {
 			//System.out.println("User is: " + activeClients.get(i).getUser());
-			userList.add(activeClients.get(i).getUser());
+			userList.add(activeClients.get(i).getUser().getUsername());
 	    }
 	    //System.out.println("DEBUG!!: " + userList.size());
 	    sendUserList(userList);
@@ -74,7 +74,7 @@ public class ChatAppServer implements Runnable
 	    activeClients.remove(client);
 	}
 	
-	public synchronized void sendUserList(ArrayList<User> userList)
+	public synchronized void sendUserList(ArrayList<String> userList)
 	{
 		Message m = new Message(userList);
 		//System.out.println(m.getUserList().size()+ "DEBUG---------");
