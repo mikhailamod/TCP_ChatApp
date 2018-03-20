@@ -108,6 +108,7 @@ public class ChatAppServer implements Runnable
 	//send given message to all active clients
 	public synchronized void broadcast(int sentFromID, Message m)
 	{
+		System.out.println("Debug CAS user exit: " + m.getData());
 		int size = activeClients.size();
 		for (int i=0; i<size;i++ )
 		{
