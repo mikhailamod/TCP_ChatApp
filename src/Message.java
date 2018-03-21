@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.zip.DataFormatException;  
 
 
 public class Message implements Serializable
@@ -68,15 +69,18 @@ public class Message implements Serializable
 	}
 	
 	//Outputs file to the received directory
-	public void outputFile(String saveDest, String name, String ext) {
+	public void outputFile(String saveDest, String name, String ext) throws IOException, DataFormatException  {
         try {
+
+        	//Start decompression
+        	Compression comp = new Compression(this.file);
         	//get directory of output
             String dir = name.substring(0, name.lastIndexOf("/")) + "/received/";
             String fname = name.substring(name.lastIndexOf("/") + 1, name.lastIndexOf("."));
 
             //output file to directory
             FileOutputStream fileoutputstream = new FileOutputStream(saveDest + fname + "" + ext);
-            fileoutputstream.write(this.file);
+            fileoutputstream.write(comp.decompress());
             fileoutputstream.close();
             //optional command to open up video
             //desktop.open(new File(dir + "" + fname + "" + ext));

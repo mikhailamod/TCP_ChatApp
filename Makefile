@@ -13,6 +13,7 @@ JUNITCP = .bin/:junit.jar:hamcrest.jar
 	$(JAVAC) -cp .:./bin:./src -d $(JCLASSDIR) $(JFLAGS) $*.java
 
 CLASSES = 	src/User.java \
+			src/Compression.java \
 			src/Message.java \
 			src/AuthManager.java \
 			src/ChatAppProtocol.java \

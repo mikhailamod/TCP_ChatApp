@@ -117,12 +117,13 @@ public class ChatAppClient {
 
             //reads in file as a byte array
             byte[] fileContent = Files.readAllBytes(path);
-
+            //Start Compressing
+            Compression comp = new Compression(fileContent);
             //creates message with correct format
             if (mime.equalsIgnoreCase("image")) {
-                m = new Message(fileContent, activeUser, "image", incoming_file);
+                m = new Message(comp.compress(), activeUser, "image", incoming_file);
             } else if (mime.equalsIgnoreCase("video")) {
-                m = new Message(fileContent, activeUser, "video", incoming_file);
+                m = new Message(comp.compress(), activeUser, "video", incoming_file);
             }
         }
 

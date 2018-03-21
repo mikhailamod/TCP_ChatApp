@@ -114,8 +114,16 @@ public class ChatAppProtocol
             //checks if user wants to accept the file
             if (decision == JOptionPane.YES_OPTION) {
                 try {
+                	Compression comp = new Compression(m.getFile());
                     //turns byte array from received file into a stream
-                    ByteArrayInputStream bis = new ByteArrayInputStream(m.getFile());
+                    ByteArrayInputStream bis = null;
+                    try {
+                    	bis = new ByteArrayInputStream(comp.decompress());
+                    }
+                    catch(Exception e) {
+                    	System.out.println("Error Decompressing!");
+                    }
+                    
                     //must convert to bufferedimage in order to display
                     BufferedImage img = ImageIO.read(bis);
                     //jframe created with icon to display image
@@ -161,7 +169,12 @@ public class ChatAppProtocol
                 
 				System.out.println("Receiving Video File...");
 				gui.receive("Receiving Video File...");
-                m.outputFile(saveDest, fname, ext);
+				try {
+					m.outputFile(saveDest, fname, ext);
+				}
+                catch(Exception e) {
+                	System.out.println(e);
+                }
                 System.out.println("File Successfully Downloaded!");
 				gui.receive("File Successfully Downloaded to " + saveDest);
             }
