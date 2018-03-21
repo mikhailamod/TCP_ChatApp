@@ -62,6 +62,7 @@ public class ServerThread extends Thread
 	{
 		try
 		{
+			
 			output.writeObject(m);
 		} catch(IOException c)
 		{
@@ -78,7 +79,7 @@ public class ServerThread extends Thread
 		    {
 				Message m;
 				m = (Message)input.readObject();//read incoming message and cast into Message
-				
+				System.out.println("Debug ST user exit: " + m.getData());
 				ChatAppProtocol protocol = new ChatAppProtocol(this, m);
 				protocol.parseMessage();
 		    } catch (IOException e) {

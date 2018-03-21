@@ -229,6 +229,7 @@ public class ChatAppClient {
         try {
             Message m = new Message("", activeUser);
             m.setTag("end");
+			System.out.println("Debug CAC user exit: " + m.getData());
             outputObject.writeObject(m);
 			clientThread.exit();
         } catch (IOException e) {

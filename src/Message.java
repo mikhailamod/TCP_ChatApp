@@ -24,7 +24,7 @@ public class Message implements Serializable
 	private byte[] file;// or file
 	private String filepath; //File's path
 
-	private ArrayList<User> userList;//a list of active clients in ChatAppServer
+	private ArrayList<String> userList;//a list of active clients in ChatAppServer
 	
 	public Message(String data, User user)
 	{
@@ -43,7 +43,7 @@ public class Message implements Serializable
 		this.filepath = filepath;
 	}
 	
-	public Message(ArrayList<User> userList)
+	public Message(ArrayList<String> userList)
 	{
 		data = "";
 		tag = "userList";
@@ -57,7 +57,7 @@ public class Message implements Serializable
 	public User getUser(){ return userFrom; }
 	public String getTag(){ return tag; }
 	public String getUserTo(){ return userTo; }
-	public ArrayList<User> getUserList(){ return userList; }
+	public ArrayList<String> getUserList(){ return userList; }
 
 	//setters
 	public void setTag(String tag){ this.tag = tag; }

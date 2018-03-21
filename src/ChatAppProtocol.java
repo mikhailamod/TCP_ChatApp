@@ -58,6 +58,7 @@ public class ChatAppProtocol
 			String bye_text = m.getUser().getUsername() + " has left.\n";
 			System.out.println(bye_text);
 			m.setData(bye_text);
+			System.out.println("Debug protocol user exit: " + m.getData());
 			server.broadcast(id, m);
 			//close IO
 			serverThread.exit();
@@ -187,6 +188,7 @@ public class ChatAppProtocol
 
 		else if (m.getTag().equals("end"))
 		{
+			System.out.println("Debug protocol client user exit: " + m.getData());
             System.out.println(m.toString());
 			gui.receive(m.getData());
         }
