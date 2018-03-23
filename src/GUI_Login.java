@@ -72,6 +72,7 @@ public class GUI_Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         setSize(new java.awt.Dimension(873, 457));
 
         jPanel1.setBackground(new java.awt.Color(98, 114, 123));

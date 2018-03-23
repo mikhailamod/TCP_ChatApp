@@ -58,6 +58,7 @@ public class GUI_Welcome extends javax.swing.JFrame{
         jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(98, 114, 123));
 
