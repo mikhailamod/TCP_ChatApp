@@ -1,5 +1,5 @@
 //A class that handles the server side of the chat app
-//Currently only acts as an echo server
+//AMDMIK002, ABRRIY002, SNGPAV002
 
 import java.util.*;
 import java.net.*;
@@ -57,6 +57,7 @@ public class ChatAppServer implements Runnable
 	    activeClients.get(activeClients.size()-1).start();//start thread
 	}//end addClient
 	
+	//add Username of all active ServerThreads to a list
 	public synchronized void updateUserList()
 	{
 	    ArrayList<String> userList = new ArrayList<>();
@@ -69,11 +70,13 @@ public class ChatAppServer implements Runnable
 	    sendUserList(userList);
 	}
 
+	//remove ServerThread from client list
 	public synchronized void removeClient(ServerThread client)
 	{	
 	    activeClients.remove(client);
 	}
 	
+	//Send String array of Usernames to all clients
 	public synchronized void sendUserList(ArrayList<String> userList)
 	{
 		Message m = new Message(userList);
@@ -119,6 +122,7 @@ public class ChatAppServer implements Runnable
 		}
 	}//end broadcast
 	
+	//if message tag was corrupted, inform the client and print to servers console
 	public synchronized void handleError(int sentFromID)
 	{
 		String data = "There was an error sending your message";
@@ -126,6 +130,7 @@ public class ChatAppServer implements Runnable
 		activeClients.get(sentFromID).recieveMessage(m);
 	}
 
+	//args[0] is the port number
 	public static void main(String[] args) throws IOException
 	{
 		ChatAppServer main_server = null;

@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;  
 
-
+//AMDMIK002, ABRRIY002, SNGPAV002
+//Contans details of message that clients will send
 public class Message implements Serializable
 {
 	//attributes
@@ -26,6 +27,7 @@ public class Message implements Serializable
 
 	private ArrayList<String> userList;//a list of active clients in ChatAppServer
 	
+	//constructor used for most messages
 	public Message(String data, User user)
 	{
 		this.data = data;
@@ -34,6 +36,7 @@ public class Message implements Serializable
 		userTo = "all";
 	}
 
+	//overloaded constructor used for files
 	public Message(byte[] file, User user, String tag, String filepath)
 	{
 		this.userFrom = user;
@@ -43,6 +46,7 @@ public class Message implements Serializable
 		this.filepath = filepath;
 	}
 	
+	//overloaded constructor used for sending a list of users
 	public Message(ArrayList<String> userList)
 	{
 		data = "";

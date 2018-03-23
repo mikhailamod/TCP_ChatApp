@@ -14,23 +14,15 @@ import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.DefaultListModel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author mikhail
- */
+//AMDMIK002, ABRRIY002, SNGPAV002
+//Made with Netbeans (which explains all the random comments)
 public class GUI_Main extends javax.swing.JFrame {
     
     //attributes
     String fileurl="";
-    String server;
-    String username;
-    int port;
+    String server;//the IP of the server
+    String username;//username of client
+    int port;//port number to connect to
 	String messageType;
 	User activeUser;
 	ChatAppClient client;
@@ -302,11 +294,12 @@ public class GUI_Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //when window is closed, stop the ChatAppClient
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         client.shutdown();
     }//GEN-LAST:event_formWindowClosing
  
-
+    //when send button is pressed
     private void btn_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendActionPerformed
 
         boolean empty = txa_newMessage.getText().equals("");

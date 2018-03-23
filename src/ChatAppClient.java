@@ -1,5 +1,5 @@
-//Client side of Chat App
-//Properly deal with errors and stop threads
+//Client side of Chat App.
+//AMDMIK002, ABRRIY002, SNGPAV002
 
 import java.net.*;
 import java.io.*;

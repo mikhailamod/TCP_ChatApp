@@ -3,16 +3,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author mikhail
- */
+//AMDMIK002, ABRRIY002
+//made with Netbeans (which explains all the random comments you might find)
 public class GUI_Login extends javax.swing.JFrame {
 
     String server;

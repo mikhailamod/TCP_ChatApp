@@ -1,5 +1,5 @@
 //A thread to handle multiple clients
-//Mikhail Amod - AMDMIK002
+//AMDMIK002, ABRRIY002, SNGPAV002
 
 import java.net.*;
 import java.io.*;

@@ -1,4 +1,5 @@
 //thread for client
+//AMDMIK002, ABRRIY002, SNGPAV002
 
 import java.net.*;
 import java.io.*;
@@ -7,8 +8,8 @@ public class ClientThread extends Thread
 {
 	private Socket clientSocket = null;//each client has a socket, this is their associated socket
 	private ChatAppClient client = null;//each ClientThread runs in ChatAppClient
-	private ObjectInputStream input;
-	private volatile boolean running;
+	private ObjectInputStream input;//stream to accept Message objects
+	private volatile boolean running;//is the clientThread currently running
 
 
 	public ClientThread(Socket socket, ChatAppClient client)
@@ -34,7 +35,7 @@ public class ClientThread extends Thread
 			try
 			{
 				Message m = (Message)input.readObject();//get message from input stream (this would be the output stream of ServerThread)
-				client.receive(m);
+				client.receive(m);//send message object to ChatAppClient(which will then parse it to the protocol).
 			}
 			catch(ClassNotFoundException ie)
 			{

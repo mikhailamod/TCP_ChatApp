@@ -1,6 +1,7 @@
 /*
 Adapted from https://dzone.com/articles/how-compress-and-uncompress
 */
+//SNGPAV002
 
 import java.io.ByteArrayOutputStream;  
 import java.io.File;  
@@ -22,6 +23,7 @@ public class Compression {
 		this.file = file;
 	}
 
+	//given a file represented as a byte array, compress the file
 	public byte[] compress() {  
 
 		try {
@@ -57,6 +59,7 @@ public class Compression {
 
 	}  
 
+	//given a compressed file, decompress it
 	public byte[] decompress() throws IOException, DataFormatException {  
 
 	   System.out.println("Starting decompression...");

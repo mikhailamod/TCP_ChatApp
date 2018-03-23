@@ -1,5 +1,6 @@
 //Manages authentication for ChatApp
 //AMDMIK002
+//bytesToString method from www.baeldung.com/sha-256-hashing-java
 
 import java.io.*;
 import java.security.*;
@@ -9,8 +10,9 @@ import java.nio.charset.StandardCharsets;
 public class AuthManager
 {
 
-	public static String DATABASE_PATH = "database.txt";
+	public static String DATABASE_PATH = "database.txt";//file that stores user data
 
+	//given a password, hash the password and then return the hashed String
 	public static String hashPassword(String input)
 	{
 		byte[] hashArr = hash(input);

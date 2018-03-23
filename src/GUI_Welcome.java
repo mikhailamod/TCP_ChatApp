@@ -5,16 +5,8 @@ import java.io.*;
 import javax.swing.SwingUtilities;
 import javax.swing.ImageIcon;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author mikhail
- */
+//AMDMIK002, ABRRIY002
+//Made with Netbeans which explains random comments
 public class GUI_Welcome extends javax.swing.JFrame{
 
     //Attributes

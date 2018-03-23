@@ -9,16 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author mikhail
- */
+//AMDMIK002, ABRRIY002, SNGPAV002
+//This class represents our implementation of our protocol.
 public class ChatAppProtocol
 {
 	ChatAppClient client;
 	ServerThread serverThread;
-	boolean forClient;
-	Message message;
+	boolean forClient;//true if initialized by client, false if initialized by server
+	Message message;//the message that the client/server wants to parse
 	
 	//Constructor for client initiated protocol
 	public ChatAppProtocol(ChatAppClient client, Message message)
@@ -35,6 +33,7 @@ public class ChatAppProtocol
 		forClient = false;
 	}
 	
+	//public method that both classes can call
 	public synchronized void parseMessage()
 	{
 		if(forClient)
@@ -47,10 +46,11 @@ public class ChatAppProtocol
 		}
 	}
 	
+	//if the server started the protocol, do these things
 	private synchronized void parseServer(Message m)
 	{
-		ChatAppServer server = serverThread.getServer();
-		int id = serverThread.getID();
+		ChatAppServer server = serverThread.getServer();//get the ChatAppServer that the ServerThread belongs to
+		int id = serverThread.getID();//get the id of the ServerThread (represents an individual client)
 		User activeUser = serverThread.getUser();
 		if(m.getTag().equals("end"))
 		{
@@ -81,13 +81,14 @@ public class ChatAppProtocol
 			server.privateMessage(id, m);
 		}
 
-		//TODO - change to else if for broadcast and file. last else must catch corrupted message.
+		//broadcast messages and files are sent to all clients.
 		else if(m.getTag().equals("broadcast") || m.getTag().equals("image") || m.getTag().equals("video"))
 		{
 			System.out.println(id + " recieved broadcast message:");//debug
 			System.out.println(m.toString());//print message to server console
-			server.broadcast(id, m);
+			server.broadcast(id, m);//send to all clients
 		}
+
 		//else this message is somehow corrupt, send error
 		else
 		{
@@ -96,19 +97,20 @@ public class ChatAppProtocol
 		}//end else
 	}
 	
-	//given a message, look at the tag to decide what to do.
+	//if the client started the protocol, do these things
 	private synchronized void parseClient(Message m)
 	{
-		GUI_Main gui = client.getGUI();
-		if (m.getTag().equals("broadcast"))
+		GUI_Main gui = client.getGUI();//get the GUI associated with the client
+
+		if (m.getTag().equals("broadcast"))//message received was a broadcast, print appropiate text
 		{
             gui.receive("[Public Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
         } 
-        else if (m.getTag().equals("private"))//for user to user message
+        else if (m.getTag().equals("private"))//message received was private, print appropiate text
 		{
             gui.receive("[Private Message]" + m.getUser().getUsername() + " says:" + m.toString() + "\n");
         } 
-        else if (m.getTag().equals("image"))//for image broadcast
+        else if (m.getTag().equals("image"))//message received was an image. Prompt user to accept it, and then open it
 		{
 			String dialogMessage = m.getUser().getUsername() + " wants to send you an image. Do you accept?";
             int decision = JOptionPane.showConfirmDialog(null, dialogMessage, "File transfer request", JOptionPane.YES_NO_OPTION);
@@ -148,7 +150,7 @@ public class ChatAppProtocol
 					gui.displayError(e, "Error in displaying image");
                 }
             }
-        } else if (m.getTag().equals("video"))
+        } else if (m.getTag().equals("video"))//message received contains a video. Prompt user to accept, and then save to a chosen location.
 		{
             String dialogMessage = m.getUser().getUsername() + " wants to send you an video. Do you accept?";
             int decision = JOptionPane.showConfirmDialog(null, dialogMessage, "File transfer request", JOptionPane.YES_NO_OPTION);
@@ -180,13 +182,13 @@ public class ChatAppProtocol
 				gui.receive("File Successfully Downloaded to " + saveDest);
             }
         }//end else if
-        else if (m.getTag().equals("userList"))
+        else if (m.getTag().equals("userList"))//message contains a list of active users. 
 		{
             System.out.println("Recieving user list - " + m.getUserList().get(0));
             gui.receive(m);
         }
 
-		else if (m.getTag().equals("end"))
+		else if (m.getTag().equals("end"))//message contains details of a client who left
 		{
 			System.out.println("Debug protocol client user exit: " + m.getData());
             System.out.println(m.toString());
